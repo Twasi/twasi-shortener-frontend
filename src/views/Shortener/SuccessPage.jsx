@@ -9,7 +9,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import LoopIcon from '@material-ui/icons/Loop';
 
-const SuccessPage = () => {
+const SuccessPage = (props) => {
 
   return(
     <div>
@@ -18,7 +18,7 @@ const SuccessPage = () => {
       </Typography>
       <Paper>
         <TextField
-          value="twa.si/r/s3xy"
+          value=""
           className="shortenerTextfield"
           InputProps={{
             endAdornment:

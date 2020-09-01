@@ -1,0 +1,12 @@
+.footer {
+  position: absolute;
+  bottom: 0;
+  border-bottom: 5px solid #2f80ed;
+  width: 100%;
+  text-align: center;
+}
+.impress {
+  margin-bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}

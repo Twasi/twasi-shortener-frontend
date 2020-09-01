@@ -1,0 +1,55 @@
+.twasi-darkblue {
+  -webkit-user-select: none;
+  user-select: none;
+}
+.twasi-darkblue img {
+  pointer-events: none;
+}
+.twasi-darkblue .translucentBox {
+  background: linear-gradient(135deg, rgb(63, 81, 181), rgb(84, 128, 255));
+}
+.twasi-darkblue .translucentBoxLeaderboard {
+  background: linear-gradient(135deg, rgb(63, 81, 181), rgb(84, 128, 255));
+}
+.twasi-darkblue .translucentBoxText {
+  color: #ffffff;
+}
+.twasi-darkblue .translucentBoxWelcome {
+  background: linear-gradient(135deg, rgb(63, 81, 181), rgb(84, 128, 255));
+}
+.twasi-darkblue .headerMenuItem {
+  background: linear-gradient(135deg, rgb(63, 81, 181), rgb(84, 128, 255));
+}
+.twasi-darkblue .TableRow {
+  border-bottom: 3px solid #3f51b5 !important;
+}
+.twasi-darkblue .bannerHeader {
+  background-color: #171d2f;
+}
+.twasi-darkblue .bannerHeaderTopBar {
+  background: linear-gradient(135deg, rgb(63, 81, 181), rgb(84, 128, 255));
+}
+.twasi-darkblue .themeIcon:hover{
+  background: -webkit-linear-gradient(135deg, #3f51b5, #3f51b5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.twasi-darkblue a {
+  color: #3f51b5;
+}
+.twasi-darkblue .urlshortener_arrow {
+  color: #3f51b5;
+}
+.twasi-darkblue .chatBubbleSelf {
+  background-color: #202940;
+  padding: 10px;
+  border-radius: 4px;
+}
+.twasi-darkblue .chatBubbleSupport {
+  background-color: #34456b;
+  padding: 10px;
+  border-radius: 4px;
+}
+.twasi-darkblue .tooltipAccountSwitch {
+  background-color: #00aeae;
+}

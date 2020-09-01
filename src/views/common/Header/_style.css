@@ -1,0 +1,11 @@
+.header {
+  border-top: 5px solid #2f80ed;
+  width: 100%;
+  position: absolute;
+  display: flex;
+}
+.logo {
+  margin-top: 45px;
+  margin-left: auto;
+  margin-right: auto;
+}

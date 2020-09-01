@@ -13,7 +13,7 @@ import Alert from '@material-ui/lab/Alert';
 import { useMutation, useQuery, gql } from '@apollo/client';
 
 const CREATE_PUBLIC_URL = gql`
-  mutation createPublicUrl($tag: String!, $url: String!) {
+  mutation{
     createPublicUrl(tag: $tag, url: $url) {
       tag
       url
@@ -22,20 +22,26 @@ const CREATE_PUBLIC_URL = gql`
 `;
 
 const ALLOWED_TAG_FORMAT = gql`
-  query allowedTagFormat {
-    allowedTagFormat{
-      regEx
+  query{
+    clientValidation{
+      validateTag{
+        regex
+        flags
+      }
     }
   }
 `;
 
 const URLShortenForm = () => {
-  const [createPublicUrl, { error, data }] = useMutation(CREATE_PUBLIC_URL);
-  const { regEx } = useQuery(ALLOWED_TAG_FORMAT);
+  //const [createPublicUrl, { data }] = useMutation(CREATE_PUBLIC_URL);
+  const { loading, error, data } = useQuery(ALLOWED_TAG_FORMAT);
 
   const [url_to_shorten, setUrl_to_shorten] = React.useState("");
   const [create_own_short_tag, setCreate_own_short_tag] = React.useState(false);
   const [own_short_tag, setOwn_short_tag] = React.useState("");
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   function randomizeShortTag() {
     var randomString = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
@@ -43,7 +49,7 @@ const URLShortenForm = () => {
   }
 
   function handleCreatePublicUrl() {
-    createPublicUrl({ variables: { tag: own_short_tag, url: url_to_shorten } });
+    //createPublicUrl({ variables: { tag: own_short_tag, url: url_to_shorten } });
     setUrl_to_shorten("");
     setOwn_short_tag("");
     setCreate_own_short_tag(false)
@@ -119,6 +125,11 @@ const URLShortenForm = () => {
             fullWidth
           />
         </Paper>
+      }
+      {data &&
+        <Alert variant="outlined" severity="info">
+          {data.clientValidation.validateTag.regex}
+        </Alert>
       }
       {error &&
         <Alert variant="outlined" severity="error">

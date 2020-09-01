@@ -1,5 +1,17 @@
-.vector {
+.vectorTop {
   position: absolute !important;
+  top: 0px;
+}
+
+.vectorBottom {
+  position: absolute !important;
+  bottom: 0px;
+  z-index: 500 !important;
+}
+
+.mainContent {
+  position: relative !important;
+  z-index: 9999 !important;
 }
 
 @media only screen and (max-width: 599px) {

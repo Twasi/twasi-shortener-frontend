@@ -18,9 +18,11 @@ import twasiDarkBlue from './theme/twasi-darkblue/twasi-darkblue';
 
 require('dotenv').config()
 const client = new ApolloClient({
-  uri: process.env.GQL_API,
+  uri: 'https://twa.si/gql',
   cache: new InMemoryCache()
 });
+
+console.log(client)
 
 const App = () => {
   return (

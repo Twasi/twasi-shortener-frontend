@@ -18,7 +18,7 @@ import NotFoundDialog from './NotFoundDialog';
 import { useMutation, useQuery, gql } from '@apollo/client';
 
 const CREATE_PUBLIC_URL = gql`
-  mutation CreatePublicUrl($tag: String!,$url: String!){
+  mutation CreatePublicUrl($tag: String,$url: String){
     createPublicUrl(tag:$tag,url:$url){
   		short
       tag

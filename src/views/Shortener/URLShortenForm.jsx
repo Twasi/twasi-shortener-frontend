@@ -69,6 +69,31 @@ const URLShortenForm = () => {
     if(urlParams.has('404')){
       setOpen404(true);
     }
+
+    const linkArray = [
+      "https://mein-megalanger-link.de",
+      "https://ich-habe-den-laengsten-link.com",
+      "https://lang-laenger-amlaengsten.net",
+      "https://das-verlangen-nach-langen-links.de",
+      "https://aus-lang-mach-kurz.de",
+      "https://in-der-kuerze-liegt-die-wuerze.net",
+      "https://wie-kuerze-ich-meinen-link-am-besten.net"
+    ]
+    var selectedLink = linkArray[Math.floor(Math.random() * linkArray.length)];
+    setSelectedLink(selectedLink);
+
+    const buttonArray = [
+      "Magie!",
+      "Mach kürzer!",
+      "Klick mich!",
+      "KÜRZER!",
+      "Simsala Bim!",
+      "Hex Hex!",
+      "Schnip Schnap!"
+    ]
+    var selectedButton = buttonArray[Math.floor(Math.random() * buttonArray.length)];
+    setSelectedButton(selectedButton);
+
   }, []);
 
   const [createPublicUrl,{ loading: urlLoading, data: urlData }] = useMutation(CREATE_PUBLIC_URL);
@@ -80,6 +105,8 @@ const URLShortenForm = () => {
   const [error, setError] = React.useState("");
   const [open404, setOpen404] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
+  const [selectedLink, setSelectedLink] = React.useState("");
+  const [selectedButton, setSelectedButton] = React.useState(false);
 
   if (urlLoading) return <p>Loading...</p>;
   if (regExLoading) return <p>Loading...</p>;
@@ -117,28 +144,6 @@ const URLShortenForm = () => {
   const handleNewUrl = () => {
     setSuccess(false);
   };
-
-  const linkArray = [
-    "https://mein-megalanger-link.de",
-    "https://ich-habe-den-laengsten-link.com",
-    "https://lang-laenger-amlaengsten.net",
-    "https://das-verlangen-nach-langen-links.de",
-    "https://aus-lang-mach-kurz.de",
-    "https://in-der-kuerze-liegt-die-wuerze.net",
-    "https://wie-kuerze-ich-meinen-link-am-besten.net"
-  ]
-  var selectedLink = linkArray[Math.floor(Math.random() * linkArray.length)];
-
-  const buttonArray = [
-    "Magie!",
-    "Mach kürzer!",
-    "Klick mich!",
-    "KÜRZER!",
-    "Simsala Bim!",
-    "Hex Hex!",
-    "Schnip Schnap!"
-  ]
-  var selectedButton = buttonArray[Math.floor(Math.random() * buttonArray.length)];
 
   function renderForm() {
     return (

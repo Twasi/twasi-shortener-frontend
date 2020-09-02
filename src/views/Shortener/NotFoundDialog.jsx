@@ -6,12 +6,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 
 const NotFoundDialog = (props) => {
-
-  const handleClose404 = () => {
-    props.handleClose404();
-  };
 
   const sadGifArray = [
     "https://media0.giphy.com/media/lp8Bchlpia9mQnhj9o/giphy.gif?cid=ecf05e4771uvaxm99l2hk05oyfjazwmr33423uk4zaad8p4b&rid=giphy.gif",
@@ -38,9 +35,12 @@ const NotFoundDialog = (props) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Leider konnten wir unter <b>"{props.url}"</b> keine Weiterleitung finden :(
+            Unter der angegebenen Adresse befindet sich keine Weiterleitung :(
             <div className="notFoundGifWrapper">
-              <img className="notFoundGif" src={selectedGif}/>
+              <img alt="sad gif" className="notFoundGif" src={selectedGif}/>
+              <Typography style={{ marginTop: "6px" }} variant="caption" display="block" gutterBottom>
+                Quelle: <Link color="inherit">https://giphy.com/</Link>
+              </Typography>
             </div>
           </DialogContentText>
         </DialogContent>

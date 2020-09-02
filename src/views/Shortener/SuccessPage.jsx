@@ -5,7 +5,13 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
+
+function handleRedirect(uri, blank){
+  window.open(encodeURI(uri), blank);
+}
+
 const SuccessPage = (props) => {
+  const [copied, setCopied] = React.useState(false);
   return(
     <div>
       <Typography className="shortenerHeadline" variant="h4">
@@ -18,8 +24,18 @@ const SuccessPage = (props) => {
           InputProps={{
             endAdornment:
               <InputAdornment position="end">
-                <Button className="shortnerButton" variant="contained" color="primary" disableElevation>
-                  Kopieren
+                <Button
+                  onClick={e => {
+                    navigator.clipboard.writeText('https://twa.si/'+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag);
+                    setCopied(true)
+                    e.stopPropagation();
+                  }}
+                  className="shortnerButton"
+                  variant="contained"
+                  color="primary"
+                  disableElevation
+                >
+                  {copied ? 'Kopiert!' : 'Kopieren'}
                 </Button>
               </InputAdornment>,
           }}
@@ -28,10 +44,23 @@ const SuccessPage = (props) => {
         />
       </Paper>
       <div className="newUrl">
-        <Button className="newUrlButton" variant="outlined" color="primary" disableElevation>
+        <Button
+          onClick={props.onNewUrl}
+          className="newUrlButton"
+          variant="outlined"
+          color="primary"
+          disableElevation
+        >
           Weitere URL kürzen
         </Button>
-        <Button className="newUrlButton" style={{ marginLeft: '10px' }} variant="outlined" color="primary" disableElevation>
+        <Button
+          onClick={() => { handleRedirect("https://twitter.com/intent/tweet?text=Schaut euch meinen coolen neuen Link an, der mit dem @TwasiNet Link-Shortener erstellt wurde! https://twa.si/"+props.urlData.createPublicUrl.short+"/"+props.urlData.createPublicUrl.tag+" Auf https://twa.si kannst du deinen eigenen Shortlink erstellen! 👀", "_blank") }}
+          className="newUrlButton"
+          style={{ marginLeft: '10px' }}
+          variant="outlined"
+          color="primary"
+          disableElevation
+        >
           Auf Twitter teilen
         </Button>
       </div>

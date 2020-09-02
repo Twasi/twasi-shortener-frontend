@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -13,7 +13,7 @@ import Alert from '@material-ui/lab/Alert';
 import SuccessPage from './SuccessPage';
 import NotFoundDialog from './NotFoundDialog';
 
-import { useMutation, useQuery, useLazyQuery, gql } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 
 const CREATE_PUBLIC_URL = gql`
   mutation CreatePublicUrl($tag: String!,$url: String!){
@@ -42,6 +42,23 @@ const ALLOWED_TAG_FORMAT = gql`
   }
 `;
 
+function removeParams(sParam)
+{
+    var url = window.location.href.split('?')[0]+'?';
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] !== sParam) {
+            url = url + sParameterName[0] + '=' + sParameterName[1] + '&'
+        }
+    }
+    return url.substring(0,url.length-1);
+}
+
 const URLShortenForm = () => {
 
   useEffect(() => {
@@ -60,8 +77,7 @@ const URLShortenForm = () => {
   const [own_short_tag, setOwn_short_tag] = React.useState("");
   const [error, setError] = React.useState("");
   const [open404, setOpen404] = React.useState(false);
-
-  console.log(urlError)
+  const [success, setSuccess] = React.useState(false);
 
   if (urlLoading) return <p>Loading...</p>;
   if (urlError) return <p>URL Endpoint Error!</p>;
@@ -77,6 +93,7 @@ const URLShortenForm = () => {
     const regex = new RegExp(regExData.clientValidation.validateTag.regex, regExData.clientValidation.validateTag.tags);
     if(!regex.test(url_to_shorten)) {
       createPublicUrl({variables:{tag:own_short_tag,url:url_to_shorten}});
+      setSuccess(true);
       setUrl_to_shorten("");
       setOwn_short_tag("");
       setError("");
@@ -88,10 +105,15 @@ const URLShortenForm = () => {
 
   const handleClose404 = () => {
     setOpen404(false);
+    window.location = removeParams('404');
+  };
+
+  const handleNewUrl = () => {
+    console.log('new url')
+    setSuccess(false);
   };
 
   function renderForm() {
-
     return (
       <div>
         <Typography className="shortenerHeadline" variant="h4">URL kürzen</Typography>
@@ -175,7 +197,7 @@ const URLShortenForm = () => {
   return (
     <div>
       <NotFoundDialog onClose={handleClose404} open={open404}/>
-      {urlData ? <SuccessPage urlData={urlData}/> : renderForm()}
+      {success ? <SuccessPage onNewUrl={handleNewUrl} urlData={urlData}/> : renderForm()}
     </div>
   )
 }

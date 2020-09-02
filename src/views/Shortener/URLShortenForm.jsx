@@ -69,7 +69,7 @@ const URLShortenForm = () => {
     }
   }, []);
 
-  const [createPublicUrl,{ loading: urlLoading, error: urlError, data: urlData }] = useMutation(CREATE_PUBLIC_URL);
+  const [createPublicUrl,{ loading: urlLoading, data: urlData }] = useMutation(CREATE_PUBLIC_URL);
   const { loading: regExLoading, error: regExError, data: regExData } = useQuery(ALLOWED_TAG_FORMAT);
 
   const [url_to_shorten, setUrl_to_shorten] = React.useState("");
@@ -103,7 +103,7 @@ const URLShortenForm = () => {
         setError('Fehler: '+error.message)
       })
     } else {
-      setError('Bitte überprüfe deine zu kürzende URL.')
+      setError('Fehler: Bitte überprüfe deine zu kürzende URL.')
     }
   }
 

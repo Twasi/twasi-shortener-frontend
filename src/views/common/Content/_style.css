@@ -15,6 +15,13 @@
   z-index: 200 !important;
 }
 
+.absolute {
+  position:absolute;
+  height: 100vh;
+  width: 100%;
+  opacity: .5;
+}
+
 @media only screen and (max-width: 599px) {
   .siteContent {
     width: 100%;

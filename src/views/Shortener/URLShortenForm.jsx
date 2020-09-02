@@ -118,6 +118,28 @@ const URLShortenForm = () => {
     setSuccess(false);
   };
 
+  const linkArray = [
+    "https://mein-megalanger-link.de",
+    "https://ich-habe-den-laengsten-link.com",
+    "https://lang-laenger-amlaengsten.net",
+    "https://das-verlangen-nach-langen-links.de",
+    "https://aus-lang-mach-kurz.de",
+    "https://in-der-kuerze-liegt-die-wuerze.net",
+    "https://wie-kuerze-ich-meinen-link-am-besten.net"
+  ]
+  var selectedLink = linkArray[Math.floor(Math.random() * linkArray.length)];
+
+  const buttonArray = [
+    "Magie!",
+    "Mach kürzer!",
+    "Klick mich!",
+    "KÜRZER!",
+    "Simsala Bim!",
+    "Hex Hex!",
+    "Schnip Schnap!"
+  ]
+  var selectedButton = buttonArray[Math.floor(Math.random() * buttonArray.length)];
+
   function renderForm() {
     return (
       <div>
@@ -126,7 +148,7 @@ const URLShortenForm = () => {
           <TextField
             onChange={(event) => setUrl_to_shorten(event.target.value)}
             value={url_to_shorten}
-            placeholder="https://mein-megalanger-link.de"
+            placeholder={selectedLink}
             className="shortenerTextfield"
             InputProps={{
               endAdornment:
@@ -139,7 +161,7 @@ const URLShortenForm = () => {
                     color="primary"
                     disableElevation
                   >
-                    Mach ihn kurz!
+                    {selectedButton}
                   </Button>
                 </InputAdornment>,
             }}

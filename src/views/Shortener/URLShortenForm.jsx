@@ -10,6 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import LoopIcon from '@material-ui/icons/Loop';
 import Alert from '@material-ui/lab/Alert';
 
+import randomWords from 'random-words';
+
 import SuccessPage from './SuccessPage';
 import NotFoundDialog from './NotFoundDialog';
 
@@ -84,8 +86,8 @@ const URLShortenForm = () => {
   if (regExError) return <p>RegEx Endpoint Error!</p>;
 
   function randomizeShortTag() {
-    var randomString = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
-    setOwn_short_tag(randomString)
+    var randomString = randomWords(3);
+    setOwn_short_tag(randomString.join(''))
   }
 
   function handleCreatePublicUrl() {

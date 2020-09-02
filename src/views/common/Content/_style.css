@@ -1,17 +1,18 @@
 .vectorTop {
   position: absolute !important;
   top: 0px;
+  z-index: 100 !important;
 }
 
 .vectorBottom {
   position: absolute !important;
   bottom: 0px;
-  z-index: 500 !important;
+  z-index: 100 !important;
 }
 
 .mainContent {
   position: relative !important;
-  z-index: 9999 !important;
+  z-index: 200 !important;
 }
 
 @media only screen and (max-width: 599px) {

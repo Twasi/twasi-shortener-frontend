@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -11,8 +11,9 @@ import LoopIcon from '@material-ui/icons/Loop';
 import Alert from '@material-ui/lab/Alert';
 
 import SuccessPage from './SuccessPage';
+import NotFoundDialog from './NotFoundDialog';
 
-import { useMutation, useQuery, gql } from '@apollo/client';
+import { useMutation, useQuery, useLazyQuery, gql } from '@apollo/client';
 
 const CREATE_PUBLIC_URL = gql`
   mutation CreatePublicUrl($tag: String!,$url: String!){
@@ -42,19 +43,30 @@ const ALLOWED_TAG_FORMAT = gql`
 `;
 
 const URLShortenForm = () => {
+
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    if(urlParams.has('404')){
+      setOpen404(true);
+    }
+  }, []);
+
   const [createPublicUrl,{ loading: urlLoading, error: urlError, data: urlData }] = useMutation(CREATE_PUBLIC_URL);
   const { loading: regExLoading, error: regExError, data: regExData } = useQuery(ALLOWED_TAG_FORMAT);
 
   const [url_to_shorten, setUrl_to_shorten] = React.useState("");
   const [create_own_short_tag, setCreate_own_short_tag] = React.useState(false);
   const [own_short_tag, setOwn_short_tag] = React.useState("");
+  const [error, setError] = React.useState("");
+  const [open404, setOpen404] = React.useState(false);
 
-  if (regExLoading) return <p>Loading...</p>;
-  if (regExError) return <p>Error: {regExError}</p>;
+  console.log(urlError)
+
   if (urlLoading) return <p>Loading...</p>;
-  if (urlError) return <p>Error</p>;
-
-  console.log(urlData)
+  if (urlError) return <p>URL Endpoint Error!</p>;
+  if (regExLoading) return <p>Loading...</p>;
+  if (regExError) return <p>RegEx Endpoint Error!</p>;
 
   function randomizeShortTag() {
     var randomString = Math.random().toString(36).substring(2, 5) + Math.random().toString(36).substring(2, 5);
@@ -62,96 +74,108 @@ const URLShortenForm = () => {
   }
 
   function handleCreatePublicUrl() {
-    createPublicUrl({variables:{tag:own_short_tag,url:url_to_shorten}});
-    setUrl_to_shorten("");
-    setOwn_short_tag("");
-    setCreate_own_short_tag(false)
+    const regex = new RegExp(regExData.clientValidation.validateTag.regex, regExData.clientValidation.validateTag.tags);
+    if(!regex.test(url_to_shorten)) {
+      createPublicUrl({variables:{tag:own_short_tag,url:url_to_shorten}});
+      setUrl_to_shorten("");
+      setOwn_short_tag("");
+      setError("");
+      setCreate_own_short_tag(false)
+    } else {
+      setError('Bitte überprüfe deine zu kürzende URL.')
+    }
   }
 
-  return(
-    <div>
-      <Typography className="shortenerHeadline" variant="h4">URL kürzen</Typography>
-      <Paper>
-        <TextField
-          onChange={(event) => setUrl_to_shorten(event.target.value)}
-          value={url_to_shorten}
-          placeholder="https://mein-megalanger-link.de"
-          className="shortenerTextfield"
-          InputProps={{
-            endAdornment:
-              <InputAdornment position="end">
-                <Button
-                  disabled={!url_to_shorten}
-                  onClick={() => handleCreatePublicUrl()}
-                  className="shortnerButton"
-                  variant="contained"
-                  color="primary"
-                  disableElevation
-                >
-                  Mach ihn kurz!
-                </Button>
-              </InputAdornment>,
-          }}
-          variant="outlined"
-          fullWidth
-        />
-      </Paper>
-      <FormControlLabel
-        className="shortenerCheckbox"
-        control={
-          <Checkbox
-            onChange={(event) => setCreate_own_short_tag(event.target.checked)}
-            checked={create_own_short_tag}
-            name="createOwnShortTag"
-            color="primary"
-          />
-        }
-        label={
-          <Typography style={{ marginTop: "6px" }} variant="caption" display="block" gutterBottom>
-            Eigene Short URL wählen
-          </Typography>
-        }
-      />
-      {create_own_short_tag &&
+  const handleClose404 = () => {
+    setOpen404(false);
+  };
+
+  function renderForm() {
+
+    return (
+      <div>
+        <Typography className="shortenerHeadline" variant="h4">URL kürzen</Typography>
         <Paper>
           <TextField
-            onChange={(event) => setOwn_short_tag(event.target.value)}
-            value={own_short_tag}
-            placeholder="s3xy"
+            onChange={(event) => setUrl_to_shorten(event.target.value)}
+            value={url_to_shorten}
+            placeholder="https://mein-megalanger-link.de"
+            className="shortenerTextfield"
             InputProps={{
-              startAdornment:
-                <InputAdornment position="start">
-                  twa.si/r/
-                </InputAdornment>,
               endAdornment:
                 <InputAdornment position="end">
-                  <IconButton
-                    aria-label="randomize short tag"
-                    onClick={() => randomizeShortTag()}
-                    edge="end"
+                  <Button
+                    disabled={!url_to_shorten}
+                    onClick={() => handleCreatePublicUrl()}
+                    className="shortnerButton"
+                    variant="contained"
+                    color="primary"
+                    disableElevation
                   >
-                    <LoopIcon />
-                  </IconButton>
+                    Mach ihn kurz!
+                  </Button>
                 </InputAdornment>,
             }}
             variant="outlined"
             fullWidth
           />
         </Paper>
-      }
-      {regExData &&
-        <Alert variant="outlined" severity="info">
-          {regExData.clientValidation.validateTag.regex}
-        </Alert>
-      }
-      {regExError &&
-        <Alert variant="outlined" severity="error">
-          {regExError}
-        </Alert>
-      }
+        <FormControlLabel
+          className="shortenerCheckbox"
+          control={
+            <Checkbox
+              onChange={(event) => setCreate_own_short_tag(event.target.checked)}
+              checked={create_own_short_tag}
+              name="createOwnShortTag"
+              color="primary"
+            />
+          }
+          label={
+            <Typography style={{ marginTop: "6px" }} variant="caption" display="block" gutterBottom>
+              Eigene Short URL wählen
+            </Typography>
+          }
+        />
+        {create_own_short_tag &&
+          <Paper style={{ marginBottom: '15px' }}>
+            <TextField
+              onChange={(event) => setOwn_short_tag(event.target.value)}
+              value={own_short_tag}
+              placeholder="s3xy"
+              InputProps={{
+                startAdornment:
+                  <InputAdornment position="start">
+                    {process.env.REACT_APP_DOMAIN}
+                  </InputAdornment>,
+                endAdornment:
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="randomize short tag"
+                      onClick={() => randomizeShortTag()}
+                      edge="end"
+                    >
+                      <LoopIcon />
+                    </IconButton>
+                  </InputAdornment>,
+              }}
+              variant="outlined"
+              fullWidth
+            />
+          </Paper>
+        }
+        {error &&
+          <Alert variant="outlined" severity="error">
+            {error}
+          </Alert>
+        }
+      </div>
+    )
+  }
 
-      {urlData && <SuccessPage/>}
-
+  return (
+    <div>
+      <NotFoundDialog onClose={handleClose404} open={open404}/>
+      {urlData ? <SuccessPage urlData={urlData}/> : renderForm()}
     </div>
   )
 }

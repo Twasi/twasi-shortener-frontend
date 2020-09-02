@@ -4,13 +4,8 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import LoopIcon from '@material-ui/icons/Loop';
 
 const SuccessPage = (props) => {
-
   return(
     <div>
       <Typography className="shortenerHeadline" variant="h4">
@@ -18,7 +13,7 @@ const SuccessPage = (props) => {
       </Typography>
       <Paper>
         <TextField
-          value=""
+          value={'https://twa.si/'+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag}
           className="shortenerTextfield"
           InputProps={{
             endAdornment:

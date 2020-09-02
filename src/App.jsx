@@ -5,7 +5,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { ApolloProvider } from '@apollo/client';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
-import { gql } from '@apollo/client';
 
 import Header from './views/common/Header';
 import Content from './views/common/Content';
@@ -16,13 +15,10 @@ import './App.css';
 
 import twasiDarkBlue from './theme/twasi-darkblue/twasi-darkblue';
 
-require('dotenv').config()
 const client = new ApolloClient({
-  uri: 'https://twa.si/gql',
+  uri: process.env.REACT_APP_GQL_API,
   cache: new InMemoryCache()
 });
-
-console.log(client)
 
 const App = () => {
   return (

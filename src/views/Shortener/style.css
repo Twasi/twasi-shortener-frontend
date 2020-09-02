@@ -36,3 +36,13 @@
 .newUrlButton {
   border-radius: 4px !important;
 }
+.notFoundGif {
+  margin-top: 25px !important;
+  height: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  display:flex;
+}
+.notFoundGifWrapper {
+  width: 100%;
+}

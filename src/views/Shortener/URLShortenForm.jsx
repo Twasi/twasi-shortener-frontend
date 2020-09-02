@@ -80,7 +80,6 @@ const URLShortenForm = () => {
   const [success, setSuccess] = React.useState(false);
 
   if (urlLoading) return <p>Loading...</p>;
-  if (urlError) return <p>URL Endpoint Error!</p>;
   if (regExLoading) return <p>Loading...</p>;
   if (regExError) return <p>RegEx Endpoint Error!</p>;
 
@@ -92,12 +91,17 @@ const URLShortenForm = () => {
   function handleCreatePublicUrl() {
     const regex = new RegExp(regExData.clientValidation.validateTag.regex, regExData.clientValidation.validateTag.tags);
     if(!regex.test(url_to_shorten)) {
-      createPublicUrl({variables:{tag:own_short_tag,url:url_to_shorten}});
-      setSuccess(true);
-      setUrl_to_shorten("");
-      setOwn_short_tag("");
-      setError("");
-      setCreate_own_short_tag(false)
+      createPublicUrl({variables:{tag:own_short_tag,url:url_to_shorten}})
+      .then(() => {
+        setSuccess(true);
+        setUrl_to_shorten("");
+        setOwn_short_tag("");
+        setError("");
+        setCreate_own_short_tag(false)
+      })
+      .catch(function(error) {
+        setError('Fehler: '+error.message)
+      })
     } else {
       setError('Bitte überprüfe deine zu kürzende URL.')
     }
@@ -109,7 +113,6 @@ const URLShortenForm = () => {
   };
 
   const handleNewUrl = () => {
-    console.log('new url')
     setSuccess(false);
   };
 
@@ -197,7 +200,7 @@ const URLShortenForm = () => {
   return (
     <div>
       <NotFoundDialog onClose={handleClose404} open={open404}/>
-      {success ? <SuccessPage onNewUrl={handleNewUrl} urlData={urlData}/> : renderForm()}
+      {success && urlData ? <SuccessPage onNewUrl={handleNewUrl} urlData={urlData}/> : renderForm()}
     </div>
   )
 }

@@ -121,11 +121,14 @@ const URLShortenForm = () => {
   function handleCreatePublicUrl() {
     const regex = new RegExp(regExData.clientValidation.validateTag.regex, regExData.clientValidation.validateTag.tags);
     if(!regex.test(url_to_shorten)) {
+      if(!own_short_tag){
+        setOwn_short_tag(null)
+      }
       createPublicUrl({variables:{tag:own_short_tag,url:url_to_shorten}})
       .then(() => {
         setSuccess(true);
         setUrl_to_shorten("");
-        setOwn_short_tag("");
+        setOwn_short_tag(null);
         setError("");
         setCreate_own_short_tag(false)
       })
@@ -140,7 +143,7 @@ const URLShortenForm = () => {
   function handleSetOwnTag(event) {
     setCreate_own_short_tag(event.target.checked)
     if(!create_own_short_tag){
-      setOwn_short_tag("");
+      setOwn_short_tag(null);
     }
     var randomString = randomWords(3);
     setOwn_short_tag_placeholder(randomString.join(''))

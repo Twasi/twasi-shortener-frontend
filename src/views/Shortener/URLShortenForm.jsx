@@ -102,6 +102,7 @@ const URLShortenForm = () => {
   const [url_to_shorten, setUrl_to_shorten] = React.useState("");
   const [create_own_short_tag, setCreate_own_short_tag] = React.useState(false);
   const [own_short_tag, setOwn_short_tag] = React.useState("");
+  const [own_short_tag_placeholder, setOwn_short_tag_placeholder] = React.useState("");
   const [error, setError] = React.useState("");
   const [open404, setOpen404] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
@@ -134,6 +135,15 @@ const URLShortenForm = () => {
     } else {
       setError('Fehler: Bitte überprüfe deine zu kürzende URL.')
     }
+  }
+
+  function handleSetOwnTag(event) {
+    setCreate_own_short_tag(event.target.checked)
+    if(!create_own_short_tag){
+      setOwn_short_tag("");
+    }
+    var randomString = randomWords(3);
+    setOwn_short_tag_placeholder(randomString.join(''))
   }
 
   const handleClose404 = () => {
@@ -178,7 +188,7 @@ const URLShortenForm = () => {
           className="shortenerCheckbox"
           control={
             <Checkbox
-              onChange={(event) => setCreate_own_short_tag(event.target.checked)}
+              onChange={(event) => handleSetOwnTag(event)}
               checked={create_own_short_tag}
               name="createOwnShortTag"
               color="primary"
@@ -195,7 +205,7 @@ const URLShortenForm = () => {
             <TextField
               onChange={(event) => setOwn_short_tag(event.target.value)}
               value={own_short_tag}
-              placeholder="s3xy"
+              placeholder={own_short_tag_placeholder}
               InputProps={{
                 startAdornment:
                   <InputAdornment position="start">

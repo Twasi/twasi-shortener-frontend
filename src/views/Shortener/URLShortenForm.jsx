@@ -123,8 +123,8 @@ const URLShortenForm = () => {
     if(!regex.test(url_to_shorten)) {
       createPublicUrl({
         variables:{
-          tag:own_short_tag == "" ? null : own_short_tag,
-          url:url_to_shorten
+          tag:own_short_tag.trim(),
+          url:url_to_shorten.trim()
         }
       })
       .then(() => {

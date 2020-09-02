@@ -157,7 +157,7 @@ const URLShortenForm = () => {
 
   function renderForm() {
     return (
-      <div>
+      <div className="anim">
         <Typography className="shortenerHeadline" variant="h4">URL kürzen</Typography>
         <Paper>
           <TextField

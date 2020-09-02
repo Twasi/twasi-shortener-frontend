@@ -13,7 +13,7 @@ function handleRedirect(uri, blank){
 const SuccessPage = (props) => {
   const [copied, setCopied] = React.useState(false);
   return(
-    <div>
+    <div className="anim">
       <Typography className="shortenerHeadline" variant="h4">
         Deine URL
       </Typography>

@@ -158,6 +158,10 @@ const URLShortenForm = () => {
 
   const handleNewUrl = () => {
     setSuccess(false);
+    setUrl_to_shorten("");
+    setOwn_short_tag("");
+    setError("");
+    setCreate_own_short_tag(false)
   };
 
   function renderForm() {

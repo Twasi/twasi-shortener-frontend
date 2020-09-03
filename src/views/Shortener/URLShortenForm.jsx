@@ -33,16 +33,28 @@ const CREATE_PUBLIC_URL = gql`
   }
 `;
 
-const ALLOWED_TAG_FORMAT = gql`
+const ALLOWED_FORMAT = gql`
   query{
     clientValidation{
       validateTag{
         regex
         flags
       }
+      validateRedirectUrl{
+        regex
+        flags
+      }
     }
   }
 `;
+
+/*
+const CHECK_TAG = gql`
+  query checkTag($tag: String!){
+    existsPublic(tag: $tag)
+  }
+`;
+*/
 
 function removeParams(sParam)
 {
@@ -96,9 +108,6 @@ const URLShortenForm = () => {
 
   }, []);
 
-  const [createPublicUrl,{ loading: urlLoading, data: urlData }] = useMutation(CREATE_PUBLIC_URL);
-  const { loading: regExLoading, error: regExError, data: regExData } = useQuery(ALLOWED_TAG_FORMAT);
-
   const [url_to_shorten, setUrl_to_shorten] = React.useState("");
   const [create_own_short_tag, setCreate_own_short_tag] = React.useState(false);
   const [own_short_tag, setOwn_short_tag] = React.useState("");
@@ -108,6 +117,16 @@ const URLShortenForm = () => {
   const [success, setSuccess] = React.useState(false);
   const [selectedLink, setSelectedLink] = React.useState("");
   const [selectedButton, setSelectedButton] = React.useState(false);
+
+  const [createPublicUrl,{ loading: urlLoading, data: urlData }] = useMutation(CREATE_PUBLIC_URL);
+  const { loading: regExLoading, error: regExError, data: regExData } = useQuery(ALLOWED_FORMAT);
+  /*
+  const { loading: tagLoading, error: tagError, data: tagData } = useQuery(CHECK_TAG, {
+    variables: { tag: own_short_tag },
+  });
+
+  console.log(tagData)
+  */
 
   if (urlLoading) return <p>Loading...</p>;
   if (regExLoading) return <p>Loading...</p>;
@@ -119,8 +138,9 @@ const URLShortenForm = () => {
   }
 
   function handleCreatePublicUrl() {
-    const regex = new RegExp(regExData.clientValidation.validateTag.regex, regExData.clientValidation.validateTag.tags);
-    if(!regex.test(url_to_shorten)) {
+    const regexUrl = new RegExp(regExData.clientValidation.validateRedirectUrl.regex, regExData.clientValidation.validateRedirectUrl.tags);
+    const regexTag = new RegExp(regExData.clientValidation.validateTag.regex, regExData.clientValidation.validateTag.tags);
+    if(regexUrl.test(url_to_shorten)) {
       createPublicUrl({
         variables:{
           tag:own_short_tag.trim(),
@@ -137,8 +157,8 @@ const URLShortenForm = () => {
       .catch(function(error) {
         setError('Fehler: '+error.message)
       })
-    } else {
-      setError('Fehler: Bitte überprüfe deine zu kürzende URL.')
+    }else {
+      setError('Fehler: Deine URL scheint Fehlerhaft zu sein.')
     }
   }
 

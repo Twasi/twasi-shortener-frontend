@@ -5,6 +5,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 
 import { ApolloProvider } from '@apollo/client';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { HttpLink } from 'apollo-link-http';
+import { split } from 'apollo-link';
+import { getMainDefinition } from 'apollo-utilities';
 
 import Header from './views/common/Header';
 import Content from './views/common/Content';
@@ -15,8 +19,29 @@ import './App.css';
 
 import twasiDarkBlue from './theme/twasi-darkblue/twasi-darkblue';
 
+const httpLink = new HttpLink({
+  uri: process.env.REACT_APP_GQL_API
+});
+
+const wsLink = new WebSocketLink({
+  uri: process.env.REACT_APP_GQL_WS,
+  options: {
+    reconnect: true
+  }
+});
+
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  wsLink,
+  httpLink,
+);
+
 const client = new ApolloClient({
-  uri: process.env.REACT_APP_GQL_API,
+  link,
   cache: new InMemoryCache()
 });
 

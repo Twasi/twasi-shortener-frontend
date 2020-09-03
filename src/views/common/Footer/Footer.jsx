@@ -23,7 +23,7 @@ const Footer = () => {
       <DisclaimerDialog onClose={handleCloseDisclaimer} open={openDisclaimer}/>
       <div className="impress">
         <Typography>
-          <Link href="https://panel-beta.twasi.net/imprint">
+          <Link target="_blank" href="https://panel-beta.twasi.net/imprint">
             Impressum
           </Link>
           <Link style={{ marginLeft: '25px' }} onClick={handleOpenDisclaimer} href="#">

@@ -7,6 +7,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
+import Grid from '@material-ui/core/Grid';
 import LoopIcon from '@material-ui/icons/Loop';
 import Alert from '@material-ui/lab/Alert';
 
@@ -15,7 +16,7 @@ import randomWords from 'random-words';
 import SuccessPage from './SuccessPage';
 import NotFoundDialog from './NotFoundDialog';
 
-import { useMutation, useQuery, gql } from '@apollo/client';
+import { useMutation, useQuery, useSubscription, gql } from '@apollo/client';
 
 const CREATE_PUBLIC_URL = gql`
   mutation CreatePublicUrl($tag: String!,$url: String!){
@@ -44,6 +45,14 @@ const ALLOWED_FORMAT = gql`
         regex
         flags
       }
+    }
+  }
+`;
+
+const PUBLIC_STATS = gql`
+  subscription {
+    publicStats{
+      urlsCreated
     }
   }
 `;
@@ -118,19 +127,14 @@ const URLShortenForm = () => {
   const [selectedLink, setSelectedLink] = React.useState("");
   const [selectedButton, setSelectedButton] = React.useState(false);
 
-  const [createPublicUrl,{ loading: urlLoading, data: urlData }] = useMutation(CREATE_PUBLIC_URL);
-  const { loading: regExLoading, error: regExError, data: regExData } = useQuery(ALLOWED_FORMAT);
-  /*
-  const { loading: tagLoading, error: tagError, data: tagData } = useQuery(CHECK_TAG, {
-    variables: { tag: own_short_tag },
-  });
+  const [createPublicUrl, { data: urlData }] = useMutation(CREATE_PUBLIC_URL);
+  const { data: regExData, loading: regExLoading } = useQuery(ALLOWED_FORMAT);
+  //const { data: publicStatsData, loading: publicStatsLoading } = useSubscription(PUBLIC_STATS);
+  //const [checkTag, { loading: tagLoading, data: tagData }] = useLazyQuery(CHECK_TAG);
 
-  console.log(tagData)
-  */
 
-  if (urlLoading) return <p>Loading...</p>;
-  if (regExLoading) return <p>Loading...</p>;
-  if (regExError) return <p>RegEx Endpoint Error!</p>;
+  if(regExLoading) return (<p>Loading...</p>);
+  //if(publicStatsLoading) return (<p>Loading...</p>);
 
   function randomizeShortTag() {
     var randomString = randomWords(3);
@@ -139,12 +143,12 @@ const URLShortenForm = () => {
 
   function handleCreatePublicUrl() {
     const regexUrl = new RegExp(regExData.clientValidation.validateRedirectUrl.regex, regExData.clientValidation.validateRedirectUrl.tags);
-    const regexTag = new RegExp(regExData.clientValidation.validateTag.regex, regExData.clientValidation.validateTag.tags);
+    //const regexTag = new RegExp(regExData.clientValidation.validateTag.regex, regExData.clientValidation.validateTag.tags);
     if(regexUrl.test(url_to_shorten)) {
       createPublicUrl({
         variables:{
-          tag:own_short_tag.trim(),
-          url:url_to_shorten.trim()
+          tag: own_short_tag.trim(),
+          url: url_to_shorten.trim()
         }
       })
       .then(() => {
@@ -157,7 +161,7 @@ const URLShortenForm = () => {
       .catch(function(error) {
         setError('Fehler: '+error.message)
       })
-    }else {
+    } else {
       setError('Fehler: Deine URL scheint Fehlerhaft zu sein.')
     }
   }
@@ -187,7 +191,9 @@ const URLShortenForm = () => {
   function renderForm() {
     return (
       <div className="anim">
-        <Typography className="shortenerHeadline" variant="h4">URL kürzen</Typography>
+        <Typography className="shortenerHeadline" variant="h4">
+          URL kürzen
+        </Typography>
         <Paper>
           <TextField
             onChange={(event) => setUrl_to_shorten(event.target.value)}
@@ -213,22 +219,31 @@ const URLShortenForm = () => {
             fullWidth
           />
         </Paper>
-        <FormControlLabel
-          className="shortenerCheckbox"
-          control={
-            <Checkbox
-              onChange={(event) => handleSetOwnTag(event)}
-              checked={create_own_short_tag}
-              name="createOwnShortTag"
-              color="primary"
+        <Grid container>
+          <Grid item xs={6}>
+            <FormControlLabel
+              className="shortenerCheckbox"
+              control={
+                <Checkbox
+                  onChange={(event) => handleSetOwnTag(event)}
+                  checked={create_own_short_tag}
+                  name="createOwnShortTag"
+                  color="primary"
+                />
+              }
+              label={
+                <Typography style={{ marginTop: "6px" }} variant="caption" display="block" gutterBottom>
+                  Eigene Short URL wählen
+                </Typography>
+              }
             />
-          }
-          label={
-            <Typography style={{ marginTop: "6px" }} variant="caption" display="block" gutterBottom>
-              Eigene Short URL wählen
+          </Grid>
+          <Grid item xs={6}>
+            <Typography style={{ marginTop: "16px", marginRight: "12px", color: "#afb6c5", textAlign: "right" }} variant="caption" display="block" gutterBottom>
+              Erstellte Shortlinks: {/*publicStatsData.publicStats.urlsCreated*/}
             </Typography>
-          }
-        />
+          </Grid>
+        </Grid>
         {create_own_short_tag &&
           <Paper style={{ marginBottom: '15px' }}>
             <TextField

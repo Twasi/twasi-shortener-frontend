@@ -63,6 +63,15 @@ const SuccessPage = (props) => {
         >
           Auf Twitter teilen
         </Button>
+        <Button
+          disabled
+          className="newUrlButton"
+          style={{ marginLeft: '10px' }}
+          variant="outlined"
+          disableElevation
+        >
+          Link Nummer: 1.338
+        </Button>
       </div>
     </div>
   )

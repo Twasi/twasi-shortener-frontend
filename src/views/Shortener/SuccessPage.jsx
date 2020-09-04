@@ -19,14 +19,14 @@ const SuccessPage = (props) => {
       </Typography>
       <Paper>
         <TextField
-          value={'https://twa.si/'+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag}
+          value={process.env.REACT_APP_TOP_LEVEL_DOMAIN+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag}
           className="shortenerTextfield"
           InputProps={{
             endAdornment:
               <InputAdornment position="end">
                 <Button
                   onClick={e => {
-                    navigator.clipboard.writeText('https://twa.si/'+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag);
+                    navigator.clipboard.writeText(process.env.REACT_APP_TOP_LEVEL_DOMAIN+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag);
                     setCopied(true)
                     e.stopPropagation();
                   }}
@@ -54,7 +54,7 @@ const SuccessPage = (props) => {
           Weitere URL kürzen
         </Button>
         <Button
-          onClick={() => { handleRedirect("https://twitter.com/intent/tweet?text=Schaut euch meinen coolen neuen Link an, der mit dem @TwasiNet Link-Shortener erstellt wurde! https://twa.si/"+props.urlData.createPublicUrl.short+"/"+props.urlData.createPublicUrl.tag+" Auf https://twa.si kannst du deinen eigenen Shortlink erstellen! 👀", "_blank") }}
+          onClick={() => { handleRedirect("https://twitter.com/intent/tweet?text=Schaut euch meinen coolen neuen Link an, der mit dem @TwasiNet Link-Shortener erstellt wurde! "+process.env.REACT_APP_TOP_LEVEL_DOMAIN+props.urlData.createPublicUrl.short+"/"+props.urlData.createPublicUrl.tag+" Auf "+process.env.REACT_APP_TOP_LEVEL_DOMAIN+" kannst du deinen eigenen Shortlink erstellen! 👀", "_blank") }}
           className="newUrlButton"
           style={{ marginLeft: '10px' }}
           variant="outlined"

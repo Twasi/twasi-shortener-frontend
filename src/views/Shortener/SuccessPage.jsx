@@ -70,7 +70,7 @@ const SuccessPage = (props) => {
           variant="outlined"
           disableElevation
         >
-          Link Nummer: 1.338
+          Link Nummer: {props.createdUrlCount}
         </Button>
       </div>
     </div>

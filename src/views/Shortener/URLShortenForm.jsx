@@ -50,8 +50,16 @@ const ALLOWED_FORMAT = gql`
 `;
 
 const PUBLIC_STATS = gql`
+  query {
+    publicStats {
+      urlsCreated
+    }
+  }
+`;
+
+const PUBLIC_STATS_SUBSCRIPTION = gql`
   subscription {
-    publicStats{
+    publicStats {
       urlsCreated
     }
   }
@@ -85,6 +93,7 @@ function removeParams(sParam)
 const URLShortenForm = () => {
 
   useEffect(() => {
+
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     if(urlParams.has('404')){
@@ -129,12 +138,12 @@ const URLShortenForm = () => {
 
   const [createPublicUrl, { data: urlData }] = useMutation(CREATE_PUBLIC_URL);
   const { data: regExData, loading: regExLoading } = useQuery(ALLOWED_FORMAT);
-  //const { data: publicStatsData, loading: publicStatsLoading } = useSubscription(PUBLIC_STATS);
+  const { data: publicStatsData, loading: publicStatsLoading } = useQuery(PUBLIC_STATS);
+  const { data: publicStatsSubscriptionData, loading: publicStatsSubscriptionLoading } = useSubscription(PUBLIC_STATS_SUBSCRIPTION);
   //const [checkTag, { loading: tagLoading, data: tagData }] = useLazyQuery(CHECK_TAG);
 
-
   if(regExLoading) return (<p>Loading...</p>);
-  //if(publicStatsLoading) return (<p>Loading...</p>);
+  if(publicStatsLoading) return (<p>Loading...</p>);
 
   function randomizeShortTag() {
     var randomString = randomWords(3);
@@ -189,6 +198,7 @@ const URLShortenForm = () => {
   };
 
   function renderForm() {
+
     return (
       <div className="anim">
         <Typography className="shortenerHeadline" variant="h4">
@@ -240,7 +250,7 @@ const URLShortenForm = () => {
           </Grid>
           <Grid item xs={6}>
             <Typography style={{ marginTop: "16px", marginRight: "12px", color: "#afb6c5", textAlign: "right" }} variant="caption" display="block" gutterBottom>
-              Erstellte Shortlinks: {/*publicStatsData.publicStats.urlsCreated*/}
+              Erstellte Shortlinks: {publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated}
             </Typography>
           </Grid>
         </Grid>
@@ -283,7 +293,7 @@ const URLShortenForm = () => {
   return (
     <div>
       <NotFoundDialog onClose={handleClose404} open={open404}/>
-      {success && urlData ? <SuccessPage onNewUrl={handleNewUrl} urlData={urlData}/> : renderForm()}
+      {success && urlData ? <SuccessPage createdUrlCount={publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated} onNewUrl={handleNewUrl} urlData={urlData}/> : renderForm()}
     </div>
   )
 }

@@ -139,7 +139,7 @@ const URLShortenForm = () => {
   const [createPublicUrl, { data: urlData }] = useMutation(CREATE_PUBLIC_URL);
   const { data: regExData, loading: regExLoading } = useQuery(ALLOWED_FORMAT);
   const { data: publicStatsData, loading: publicStatsLoading } = useQuery(PUBLIC_STATS);
-  const { data: publicStatsSubscriptionData, loading: publicStatsSubscriptionLoading } = useSubscription(PUBLIC_STATS_SUBSCRIPTION);
+  const { data: publicStatsSubscriptionData } = useSubscription(PUBLIC_STATS_SUBSCRIPTION);
   //const [checkTag, { loading: tagLoading, data: tagData }] = useLazyQuery(CHECK_TAG);
 
   if(regExLoading) return (<p>Loading...</p>);

@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import QRCode from 'qrcode.react';
 
 
 function handleRedirect(uri, blank){
@@ -14,6 +15,12 @@ const SuccessPage = (props) => {
   const [copied, setCopied] = React.useState(false);
   return(
     <div className="anim">
+      <QRCode
+        className="QRCode"
+        bgColor="transparent"
+        fgColor="#2f80ed"
+        value={process.env.REACT_APP_TOP_LEVEL_DOMAIN+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag}
+      />
       <Typography className="shortenerHeadline" variant="h4">
         Deine URL
       </Typography>

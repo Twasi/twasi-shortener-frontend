@@ -12,6 +12,14 @@
   margin: auto;
   min-width: 500px;
 }
+.QRCode {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  border: 4px solid #2f80ed;
+  padding: 5px;
+}
 .shortenerHeadline {
   font-weight: 900 !important;
   background: -webkit-linear-gradient(right, #56ccf2, #2f80ed);

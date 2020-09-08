@@ -22,6 +22,11 @@
   opacity: .5;
 }
 
+.bottom {
+  position: fixed;
+  bottom: 0;
+}
+
 .animate {
   transition: all 10s ease-in-out;
 }

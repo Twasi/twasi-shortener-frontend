@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import './_style.css';
 
 const Waves = (props) => {
-  const [path, setPath] = React.useState("");
   const [svg, setSvg] = React.useState();
 
   useEffect(() => {

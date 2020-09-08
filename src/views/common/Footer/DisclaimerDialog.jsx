@@ -28,7 +28,7 @@ const DisclaimerDialog = (props) => {
             Aus diesem Grund kann und wird sowohl vom Bereitsteller als auch vom Entwickler (Twasi-Team) keine Gewähr für verlinkte Inhalte übernommen. <br/>
             Erstellte Adressen werden von uns zum Zeitpunkt der Erstellung nicht untersucht. <br/><br/>
             Sollte eine Beschwerde über einen verlinkten Inhalt erfolgen, <br/>
-            kann dies eine Sperrung der Verlinkung oder einen Warnhinweise für Aufrufende Nutzer nach sich ziehen, <br/>
+            kann dies eine Sperrung der Verlinkung oder einen Warnhinweise für aufrufende Nutzer nach sich ziehen, <br/>
             der Betreiber des Dienstes verpflichtet sich hierzu jedoch nicht. <br/>
             Über die Verlinkung von pornografischen, politischen, potenziell gefährlichen (z.B. Computerviren) o. Ä. Inhalten haben wir keinen Einfluss. <br/>
             Ein verlinkter Inhalt ist in keinster Weise repräsentativ für die öffentliche Meinung des Entwicklers oder des Betreibers des Dienstes.

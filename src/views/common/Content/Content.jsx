@@ -9,31 +9,98 @@ const Content = ({ children }) =>
   <div className={"siteContent"}>
     <Particles
       params={{
-        "particles": {
-            "number": {
-                "value": 100,
-                "density": {
-                    "enable": false
-                }
-            },
-            "size": {
-                "value": 5,
-                "random": true,
-                "anim": {
-                    "speed": 4,
-                    "size_min": 0.3
-                }
-            },
-            "line_linked": {
-                "enable": false
-            },
-            "move": {
-                "random": true,
-                "speed": 2,
-                "direction": "top",
-                "out_mode": "out"
-            }
-        },
+          particles: {
+              number: {
+                  value: 13.7,
+                  density: {
+                      enable: true,
+                      value_area: 800
+                  }
+              },
+              color: {
+                  value: '#2f80ed'
+              },
+              shape: {
+                  type: 'circle'
+              },
+              opacity: {
+                  value: 0.2,
+                  random: true,
+                  anim: {
+                      enable: false,
+                      speed: 1,
+                      opacity_min: 0.1,
+                      sync: false
+                  }
+              },
+              size: {
+                  value: 45,
+                  random: true,
+                  anim: {
+                      enable: true,
+                      speed: 1,
+                      size_min: 10,
+                      sync: false
+                  }
+              },
+              line_linked: {
+                  enable: false
+              },
+              move: {
+                  enable: true,
+                  speed: 1.8,
+                  direction: 'top',
+                  random: true,
+                  straight: false,
+                  out_mode: 'out',
+                  bounce: false,
+                  attract: {
+                      enable: false,
+                      rotateX: 315.65905665290904,
+                      rotateY: 78.91476416322726
+                  }
+              }
+          },
+          interactivity: {
+              detect_on: 'canvas',
+              events: {
+                  onhover: {
+                      enable: false,
+                      mode: 'repulse'
+                  },
+                  onclick: {
+                      enable: false,
+                      mode: 'push'
+                  },
+                  resize: true
+              },
+              modes: {
+                  grab: {
+                      distance: 400,
+                      line_linked: {
+                          opacity: 1
+                      }
+                  },
+                  bubble: {
+                      distance: 400,
+                      size: 40,
+                      duration: 2,
+                      opacity: 8,
+                      speed: 3
+                  },
+                  repulse: {
+                      distance: 200,
+                      duration: 0.4
+                  },
+                  push: {
+                      particles_nb: 4
+                  },
+                  remove: {
+                      particles_nb: 2
+                  }
+              }
+          },
+          retina_detect: true
       }}
       className="absolute" />
     <div className="mainContent">

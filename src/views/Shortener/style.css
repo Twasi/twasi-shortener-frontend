@@ -21,6 +21,7 @@
   padding: 5px;
 }
 .shortenerHeadline {
+  width: fit-content;
   font-weight: 900 !important;
   background: -webkit-linear-gradient(right, #56ccf2, #2f80ed);
   -webkit-background-clip: text;

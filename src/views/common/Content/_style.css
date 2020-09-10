@@ -31,6 +31,36 @@
   transition: all 10s ease-in-out;
 }
 
+.corner-ribbon{
+  cursor: pointer;
+  z-index: 9999;
+  width: 400px;
+  height: 40px;
+  background: #ffffff;
+  position: absolute;
+  top: 40px;
+  left: -50px;
+  text-align: center;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.corner-ribbon.sticky{
+  position: fixed;
+}
+.corner-ribbon.top-right{
+  top: 40px;
+  right: -150px;
+  left: auto;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.webstore-wrapper > img {
+  height: 40px;
+  position: relative;
+}
+
 @media only screen and (max-width: 599px) {
   .siteContent {
     width: 100%;

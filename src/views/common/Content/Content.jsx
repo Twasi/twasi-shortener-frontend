@@ -1,12 +1,21 @@
 import React from 'react';
 import Particles from 'react-particles-js';
 import Waves from './Waves';
+import Link from '@material-ui/core/Link';
 
+import ChromeWebStore_Badge from '../../../resources/ChromeWebStore_Badge.svg';
 import './_style.css';
 
 const Content = ({ children }) =>
 
   <div className={"siteContent"}>
+    <div id="corner-ribbon" class="corner-ribbon top-right sticky blue">
+      <Link href="https://twa.si/r/extension" target="_blank">
+      <div className="webstore-wrapper">
+        <img src={ChromeWebStore_Badge} alt="Twasi Chrome Web Store"/>
+      </div>
+      </Link>
+    </div>
     <Particles
       params={{
           particles: {

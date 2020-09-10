@@ -35,18 +35,18 @@ const NotFoundDialog = (props) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Unter der angegebenen Adresse befindet sich keine Weiterleitung :(
+            {props.t('404_headline')}
             <div className="notFoundGifWrapper">
               <img alt="sad gif" className="notFoundGif" src={selectedGif}/>
               <Typography style={{ marginTop: "6px" }} variant="caption" display="block" gutterBottom>
-                Quelle: <Link color="inherit">https://giphy.com/</Link>
+                {props.t('404_source')}: <Link color="inherit">https://giphy.com/</Link>
               </Typography>
             </div>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button style={{ margin: 'auto' }} variant="contained" onClick={props.onClose} color="primary" autoFocus>
-            Eigenen Shortlink erstellen
+            {props.t('404_button')}
           </Button>
         </DialogActions>
       </Dialog>

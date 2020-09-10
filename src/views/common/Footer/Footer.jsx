@@ -5,9 +5,11 @@ import Typography from '@material-ui/core/Typography';
 import DisclaimerDialog from './DisclaimerDialog';
 import DatenschutzDialog from './DatenschutzDialog';
 
+import { withNamespaces } from 'react-i18next';
+
 import './_style.css';
 
-const Footer = () => {
+const Footer = ({t}) => {
 
   const [openDisclaimer, setOpenDisclaimer] = React.useState(false);
   const [openDatenschutz, setOpenDatenschutz] = React.useState(false);
@@ -30,29 +32,29 @@ const Footer = () => {
 
   return (
     <div className="footer">
-      <DisclaimerDialog onClose={handleCloseDisclaimer} open={openDisclaimer}/>
-      <DatenschutzDialog onClose={handleCloseDatenschutz} open={openDatenschutz}/>
+      <DisclaimerDialog onClose={handleCloseDisclaimer} open={openDisclaimer} t={t}/>
+      <DatenschutzDialog onClose={handleCloseDatenschutz} open={openDatenschutz} t={t}/>
       <div className="footer-container">
         <Typography>
           <Link target="_blank" href="https://panel-beta.twasi.net/imprint">
-            Impressum
+            {t('imprint')}
           </Link>
           <Link style={{ marginLeft: '25px', cursor: "pointer" }} onClick={handleOpenDisclaimer}>
-            Disclaimer
+            {t('disclaimer')}
           </Link>
           <Link style={{ marginLeft: '25px', cursor: "pointer" }} onClick={handleOpenDatenschutz}>
-            Datenschutz
+            {t('privacy')}
           </Link>
           <Link style={{ marginLeft: '25px' }} target="_blank" href="https://github.com/Twasi">
             GitHub
           </Link>
         </Typography>
         <Typography variant="caption" style={{ fontSize: "10px", color: "#adbfff" }} display="block" gutterBottom>
-          Mit der Nutzung dieses Dienstes stimmst Du unserer Datenschutzbestimmung und unserem Haftungsausschluss (Disclaimer) zu.
+          {t('disclaimer_text')}
         </Typography>
       </div>
     </div>
   );
 }
 
-export default Footer;
+export default withNamespaces()(Footer);

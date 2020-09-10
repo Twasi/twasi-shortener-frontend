@@ -11,6 +11,8 @@ import Grid from '@material-ui/core/Grid';
 import LoopIcon from '@material-ui/icons/Loop';
 import Alert from '@material-ui/lab/Alert';
 
+import { withNamespaces } from 'react-i18next';
+
 import randomWords from 'random-words';
 
 import SuccessPage from './SuccessPage';
@@ -90,7 +92,7 @@ function removeParams(sParam)
     return url.substring(0,url.length-1);
 }
 
-const URLShortenForm = () => {
+const URLShortenForm = ({t}) => {
 
   useEffect(() => {
 
@@ -168,10 +170,10 @@ const URLShortenForm = () => {
         setCreate_own_short_tag(false)
       })
       .catch(function(error) {
-        setError('Fehler: '+error.message)
+        setError(t('error')+": "+error.message)
       })
     } else {
-      setError('Fehler: Deine URL scheint Fehlerhaft zu sein.')
+      setError(t('error')+": "+t('url_error'))
     }
   }
 
@@ -202,11 +204,14 @@ const URLShortenForm = () => {
     return (
       <div className="anim">
         <Typography className="shortenerHeadline" variant="h4">
-          URL kürzen
+          {t('shorten_url')}
         </Typography>
         <Paper>
           <TextField
-            onChange={(event) => setUrl_to_shorten(event.target.value)}
+            onChange={(event) => {
+              setUrl_to_shorten(event.target.value);
+              setError("");
+            }}
             value={url_to_shorten}
             placeholder={selectedLink}
             className="shortenerTextfield"
@@ -243,14 +248,14 @@ const URLShortenForm = () => {
               }
               label={
                 <Typography style={{ marginTop: "6px" }} variant="caption" display="block" gutterBottom>
-                  Eigene Short URL wählen
+                  {t('choose_own_tag')}
                 </Typography>
               }
             />
           </Grid>
           <Grid item xs={6}>
             <Typography style={{ marginTop: "16px", marginRight: "12px", color: "#afb6c5", textAlign: "right" }} variant="caption" display="block" gutterBottom>
-              Erstellte Shortlinks: {publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated}
+              {t('created_urls')}: {publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated}
             </Typography>
           </Grid>
         </Grid>
@@ -292,10 +297,10 @@ const URLShortenForm = () => {
 
   return (
     <div>
-      <NotFoundDialog onClose={handleClose404} open={open404}/>
-      {success && urlData ? <SuccessPage createdUrlCount={publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated} onNewUrl={handleNewUrl} urlData={urlData}/> : renderForm()}
+      <NotFoundDialog t={t} onClose={handleClose404} open={open404}/>
+      {success && urlData ? <SuccessPage t={t} createdUrlCount={publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated} onNewUrl={handleNewUrl} urlData={urlData}/> : renderForm()}
     </div>
   )
 }
 
-export default URLShortenForm;
+export default withNamespaces()(URLShortenForm);

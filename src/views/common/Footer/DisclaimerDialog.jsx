@@ -18,7 +18,7 @@ const DisclaimerDialog = (props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          <Typography className="shortenerHeadline" variant="h4">Disclaimer</Typography>
+          <Typography className="shortenerHeadline" variant="h4">{props.t('disclaimer')}</Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -36,7 +36,7 @@ const DisclaimerDialog = (props) => {
         </DialogContent>
         <DialogActions>
           <Button style={{ margin: 'auto' }} variant="contained" onClick={props.onClose} color="primary" autoFocus>
-            Verstanden, danke!
+            {props.t('got_it_button')}
           </Button>
         </DialogActions>
       </Dialog>

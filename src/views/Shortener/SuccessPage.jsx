@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import QRCode from 'qrcode.react';
 
-
 function handleRedirect(uri, blank){
   window.open(encodeURI(uri), blank);
 }
@@ -22,7 +21,7 @@ const SuccessPage = (props) => {
         value={process.env.REACT_APP_TOP_LEVEL_DOMAIN+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag}
       />
       <Typography className="shortenerHeadline" variant="h4">
-        Deine URL
+        {props.t('your_url')}
       </Typography>
       <Paper>
         <TextField
@@ -42,7 +41,7 @@ const SuccessPage = (props) => {
                   color="primary"
                   disableElevation
                 >
-                  {copied ? 'Kopiert!' : 'Kopieren'}
+                  {copied ? props.t('copied') : props.t('copy')}
                 </Button>
               </InputAdornment>,
           }}
@@ -58,7 +57,7 @@ const SuccessPage = (props) => {
           color="primary"
           disableElevation
         >
-          Weitere URL kürzen
+          {props.t('shorten_another_url')}
         </Button>
         <Button
           onClick={() => { handleRedirect("https://twitter.com/intent/tweet?text=Schaut euch meinen coolen neuen Link an, der mit dem @TwasiNet Link-Shortener erstellt wurde! "+process.env.REACT_APP_TOP_LEVEL_DOMAIN+props.urlData.createPublicUrl.short+"/"+props.urlData.createPublicUrl.tag+" Auf "+process.env.REACT_APP_TOP_LEVEL_DOMAIN+" kannst du deinen eigenen Shortlink erstellen! 👀", "_blank") }}
@@ -68,7 +67,7 @@ const SuccessPage = (props) => {
           color="primary"
           disableElevation
         >
-          Auf Twitter teilen
+          {props.t('share_on_twitter')}
         </Button>
         <Button
           disabled
@@ -77,7 +76,7 @@ const SuccessPage = (props) => {
           variant="outlined"
           disableElevation
         >
-          Link Nummer: {props.createdUrlCount}
+          {props.t('link_number')}: {props.createdUrlCount}
         </Button>
       </div>
     </div>

@@ -19,7 +19,7 @@ const DatenschutzDialog = (props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          <Typography className="shortenerHeadline" variant="h4">Datenschutzerklärung gemäß der DSGVO</Typography>
+          <Typography className="shortenerHeadline" variant="h4">{props.t('privacy_headline')}</Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -47,7 +47,7 @@ const DatenschutzDialog = (props) => {
         </DialogContent>
         <DialogActions>
           <Button style={{ margin: 'auto' }} variant="contained" onClick={props.onClose} color="primary" autoFocus>
-            Verstanden, danke!
+            {props.t('got_it_button')}
           </Button>
         </DialogActions>
       </Dialog>

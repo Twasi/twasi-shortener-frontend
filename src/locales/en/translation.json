@@ -1,0 +1,23 @@
+{
+  "shorten_url": "Shorten URL",
+  "choose_own_tag": "choose own URL tag",
+  "created_urls": "created shortlinks",
+  "your_url": "Your URL",
+  "shorten_another_url": "shorten another URL",
+  "share_on_twitter": "share on Twitter",
+  "link_number": "link number",
+  "twitter_share_text": "",
+  "copy": "copy",
+  "copied": "copied!",
+  "imprint": "Imprint",
+  "disclaimer": "Disclaimer",
+  "privacy": "Privacy Policy",
+  "privacy_headline": "Privacy Policy",
+  "error": "Error",
+  "url_error": "Your URL is not valid.",
+  "got_it_button": "Got it, thanks!",
+  "404_headline": "There is no forwarding at the specified address :(",
+  "404_source": "Source",
+  "404_button": "Create own short URL",
+  "disclaimer_text": "By using this service you agree to our privacy policy and our disclaimer."
+}

@@ -5,7 +5,7 @@ const Waves = (props) => {
   const [svg, setSvg] = React.useState();
 
   useEffect(() => {
-    setInterval(getRandomPath,10000);
+    setInterval(getRandomPath,10000)
     getRandomPath()
   }, []);
 
@@ -37,11 +37,6 @@ const Waves = (props) => {
         <path className="animate" fill="#2f80ed" fill-opacity="1" d={randomPath}></path>
       </svg>
     )
-    /*
-    console.log('test')
-    const randomPath = paths[Math.floor(Math.random() * paths.length)];
-    setPath(randomPath)
-    */
   }
 
   return (

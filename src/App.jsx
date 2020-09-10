@@ -45,7 +45,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-const App = () => {
+const App = ({t}) => {
   return (
     <ApolloProvider client={client}>
       <MuiThemeProvider theme={twasiDarkBlue}>
@@ -64,4 +64,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default (App);

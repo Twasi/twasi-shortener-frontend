@@ -19,5 +19,23 @@
   "404_headline": "Unter der angegebenen Adresse befindet sich keine Weiterleitung :(",
   "404_source": "Quelle",
   "404_button": "Eigenen Shortlink erstellen",
-  "disclaimer_text": "Mit der Nutzung dieses Dienstes stimmst Du unserer Datenschutzbestimmung und unserem Haftungsausschluss (Disclaimer) zu."
+  "disclaimer_text": "Mit der Nutzung dieses Dienstes stimmst Du unserer Datenschutzbestimmung und unserem Haftungsausschluss (Disclaimer) zu.",
+  "button_array": [
+    "Magie!",
+    "Mach kürzer!",
+    "Klick mich!",
+    "KÜRZER!",
+    "Simsala Bim!",
+    "Hex Hex!",
+    "Schnip Schnap!"
+  ],
+  "link_array": [
+    "https://mein-megalanger-link.de",
+    "https://ich-habe-den-laengsten-link.com",
+    "https://lang-laenger-amlaengsten.net",
+    "https://das-verlangen-nach-langen-links.de",
+    "https://aus-lang-mach-kurz.de",
+    "https://in-der-kuerze-liegt-die-wuerze.net",
+    "https://wie-kuerze-ich-meinen-link-am-besten.net"
+  ]
 }

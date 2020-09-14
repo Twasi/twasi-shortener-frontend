@@ -19,5 +19,19 @@
   "404_headline": "There is no forwarding at the specified address :(",
   "404_source": "Source",
   "404_button": "Create own shortlink",
-  "disclaimer_text": "By using this service you agree to our privacy policy and our disclaimer."
+  "disclaimer_text": "By using this service you agree to our privacy policy and our disclaimer.",
+  "button_array": [
+    "Magic!",
+    "Make it shorter!",
+    "Click me!",
+    "SHORTER!"
+  ],
+  "link_array": [
+    "https://my-long-link.com",
+    "https://i-have-the-longest-link.com",
+    "https://long-longer-longest.net",
+    "https://from-long-to-short.net",
+    "https://brevity-is-the-soul-of-wit.com",
+    "https://how-do-i-short-my-link.net"
+  ]
 }

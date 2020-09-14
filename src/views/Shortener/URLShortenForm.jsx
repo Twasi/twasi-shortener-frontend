@@ -95,38 +95,21 @@ function removeParams(sParam)
 const URLShortenForm = ({t}) => {
 
   useEffect(() => {
-
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     if(urlParams.has('404')){
       setOpen404(true);
     }
 
-    const linkArray = [
-      "https://mein-megalanger-link.de",
-      "https://ich-habe-den-laengsten-link.com",
-      "https://lang-laenger-amlaengsten.net",
-      "https://das-verlangen-nach-langen-links.de",
-      "https://aus-lang-mach-kurz.de",
-      "https://in-der-kuerze-liegt-die-wuerze.net",
-      "https://wie-kuerze-ich-meinen-link-am-besten.net"
-    ]
+    const linkArray = t('link_array', { returnObjects: true });
     var selectedLink = linkArray[Math.floor(Math.random() * linkArray.length)];
     setSelectedLink(selectedLink);
 
-    const buttonArray = [
-      "Magie!",
-      "Mach kürzer!",
-      "Klick mich!",
-      "KÜRZER!",
-      "Simsala Bim!",
-      "Hex Hex!",
-      "Schnip Schnap!"
-    ]
+    const buttonArray = t('button_array', { returnObjects: true });
     var selectedButton = buttonArray[Math.floor(Math.random() * buttonArray.length)];
     setSelectedButton(selectedButton);
 
-  }, []);
+  }, [t]);
 
   const [url_to_shorten, setUrl_to_shorten] = React.useState("");
   const [create_own_short_tag, setCreate_own_short_tag] = React.useState(false);

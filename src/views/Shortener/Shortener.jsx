@@ -7,11 +7,9 @@ import './style.css';
 class Shortener extends Component {
   render() {
     return (
-      <div className="content">
-        <div className="contentWrapper">
-          <div className="centeredContentBox">
-            <URLShortenForm/>
-          </div>
+      <div className="contentWrapper">
+        <div className="centeredContentBox">
+          <URLShortenForm/>
         </div>
       </div>
     );

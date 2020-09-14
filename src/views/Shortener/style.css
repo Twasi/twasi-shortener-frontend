@@ -10,7 +10,10 @@
 }
 .centeredContentBox {
   margin: auto;
-  min-width: 500px;
+  width: 100%;
+  max-width: 600px;
+  min-width: 300px;
+  padding: 25px;
 }
 .QRCode {
   margin: auto;

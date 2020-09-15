@@ -214,7 +214,7 @@ export default createMuiTheme({
         backgroundColor: '#232f4a' // Some CSS
       },
       colorPrimary: {
-        background: 'linear-gradient(135deg, rgb(63, 81, 181), rgb(84, 128, 255))'
+        backgroundColor: '#2f80ed'
       },
       colorSecondary: {
         background: 'linear-gradient(135deg,#de6464,#ff7b7b)'

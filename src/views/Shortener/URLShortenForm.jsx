@@ -17,6 +17,8 @@ import randomWords from 'random-words';
 
 import SuccessPage from './SuccessPage';
 import NotFoundDialog from './NotFoundDialog';
+import ConnectDialog from './ConnectDialog';
+import ManageDialog from './ManageDialog';
 
 import { useMutation, useQuery, useSubscription, gql } from '@apollo/client';
 
@@ -111,12 +113,16 @@ const URLShortenForm = ({t}) => {
 
   }, [t]);
 
+  const token = localStorage.getItem('JWT');
+
   const [url_to_shorten, setUrl_to_shorten] = React.useState("");
   const [create_own_short_tag, setCreate_own_short_tag] = React.useState(false);
   const [own_short_tag, setOwn_short_tag] = React.useState("");
   const [own_short_tag_placeholder, setOwn_short_tag_placeholder] = React.useState("");
   const [error, setError] = React.useState("");
   const [open404, setOpen404] = React.useState(false);
+  const [openConnect, setOpenConnect] = React.useState(false);
+  const [openManage, setOpenManage] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [selectedLink, setSelectedLink] = React.useState("");
   const [selectedButton, setSelectedButton] = React.useState(false);
@@ -174,6 +180,22 @@ const URLShortenForm = ({t}) => {
     window.location = removeParams('404');
   };
 
+  const handleOpenConnect = () => {
+    setOpenConnect(true);
+  };
+
+  const handleCloseConnect = () => {
+    setOpenConnect(false);
+  };
+
+  const handleOpenManage = () => {
+    setOpenManage(true);
+  };
+
+  const handleCloseManage = () => {
+    setOpenManage(false);
+  };
+
   const handleNewUrl = () => {
     setSuccess(false);
     setUrl_to_shorten("");
@@ -186,9 +208,20 @@ const URLShortenForm = ({t}) => {
 
     return (
       <div className="anim">
-        <Typography className="shortenerHeadline" variant="h4">
-          {t('shorten_url')}
-        </Typography>
+        <Grid container>
+          <Grid item xs={9}>
+            <Typography className="shortenerHeadline" variant="h4">
+              {t('shorten_url')}
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Button style={{ marginRight: '12px', float: 'right' }} onClick={token ? handleOpenManage : handleOpenConnect}>
+              <Typography variant="caption" display="block">
+                {token ? t('manage') : t('connect')}
+              </Typography>
+            </Button>
+          </Grid>
+        </Grid>
         <Paper>
           <TextField
             onChange={(event) => {
@@ -281,6 +314,8 @@ const URLShortenForm = ({t}) => {
   return (
     <div>
       <NotFoundDialog t={t} onClose={handleClose404} open={open404}/>
+      <ConnectDialog t={t} onClose={handleCloseConnect} open={openConnect}/>
+      <ManageDialog t={t} onClose={handleCloseManage} open={openManage}/>
       {success && urlData ? <SuccessPage t={t} createdUrlCount={publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated} onNewUrl={handleNewUrl} urlData={urlData}/> : renderForm()}
     </div>
   )

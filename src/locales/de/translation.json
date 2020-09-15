@@ -19,6 +19,12 @@
   "404_headline": "Unter der angegebenen Adresse befindet sich keine Weiterleitung :(",
   "404_source": "Quelle",
   "404_button": "Eigenen Shortlink erstellen",
+  "connect": "Anmelden",
+  "manage": "Verwalten",
+  "manage_headline": "Hier kannst du deine bereits erstellten Links verwalten.",
+  "disconnect_button": "Verbindung zu Twitch trennen",
+  "connect_headline": "Melde dich mit Twitch an, um deine erstellten Shortlinks zu verwalten.",
+  "twitch_button": "Mit Twitch verbinden",
   "disclaimer_text": "Mit der Nutzung dieses Dienstes stimmst Du unserer Datenschutzbestimmung und unserem Haftungsausschluss (Disclaimer) zu.",
   "button_array": [
     "Magie!",

@@ -19,6 +19,12 @@
   "404_headline": "There is no forwarding at the specified address :(",
   "404_source": "Source",
   "404_button": "Create own shortlink",
+  "connect": "Connect",
+  "manage": "Manage",
+  "manage_headline": "Here you can manage your already created Shortlinks.",
+  "disconnect_button": "Disconnect from Twitch",
+  "connect_headline": "Connect your Twitch account to manage your created shortlinks.",
+  "twitch_button": "Connect via Twitch",
   "disclaimer_text": "By using this service you agree to our privacy policy and our disclaimer.",
   "button_array": [
     "Magic!",

@@ -23,6 +23,10 @@
   border: 4px solid #202940;
   padding: 5px;
 }
+.twitchButton {
+  background-color: #9147ff !important;
+  color: #ffffff !important;
+}
 .shortenerHeadline {
   width: fit-content;
   font-weight: 900 !important;

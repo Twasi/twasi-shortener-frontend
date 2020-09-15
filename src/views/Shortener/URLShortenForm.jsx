@@ -11,6 +11,8 @@ import Grid from '@material-ui/core/Grid';
 import LoopIcon from '@material-ui/icons/Loop';
 import Alert from '@material-ui/lab/Alert';
 
+import isLoggedIn from '../../jwtContents'
+
 import { withNamespaces } from 'react-i18next';
 
 import randomWords from 'random-words';
@@ -113,8 +115,6 @@ const URLShortenForm = ({t}) => {
 
   }, [t]);
 
-  const token = localStorage.getItem('JWT');
-
   const [url_to_shorten, setUrl_to_shorten] = React.useState("");
   const [create_own_short_tag, setCreate_own_short_tag] = React.useState(false);
   const [own_short_tag, setOwn_short_tag] = React.useState("");
@@ -215,9 +215,9 @@ const URLShortenForm = ({t}) => {
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            <Button style={{ marginRight: '12px', float: 'right' }} onClick={token ? handleOpenManage : handleOpenConnect}>
+            <Button style={{ marginRight: '12px', float: 'right' }} onClick={isLoggedIn() ? handleOpenManage : handleOpenConnect}>
               <Typography variant="caption" display="block">
-                {token ? t('manage') : t('connect')}
+                {isLoggedIn() ? t('manage') : t('connect')}
               </Typography>
             </Button>
           </Grid>
@@ -314,8 +314,10 @@ const URLShortenForm = ({t}) => {
   return (
     <div>
       <NotFoundDialog t={t} onClose={handleClose404} open={open404}/>
-      <ConnectDialog t={t} onClose={handleCloseConnect} open={openConnect}/>
-      <ManageDialog t={t} onClose={handleCloseManage} open={openManage}/>
+      {isLoggedIn() ?
+        <ManageDialog t={t} onClose={handleCloseManage} open={openManage}/> :
+        <ConnectDialog t={t} onClose={handleCloseConnect} open={openConnect}/>
+      }
       {success && urlData ? <SuccessPage t={t} createdUrlCount={publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated} onNewUrl={handleNewUrl} urlData={urlData}/> : renderForm()}
     </div>
   )

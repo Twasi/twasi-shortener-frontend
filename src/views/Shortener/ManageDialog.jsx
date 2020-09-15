@@ -16,27 +16,14 @@ import TableRow from '@material-ui/core/TableRow';
 import Link from '@material-ui/core/Link';
 import Chip from '@material-ui/core/Chip';
 
-import jwt_decode from "jwt-decode";
+import getJwtContents from '../../jwtContents';
 
 const ManageDialog = (props) => {
 
-  const [userData, setUserData] = React.useState();
-
-  const token = localStorage.getItem('JWT');
-
-  const parseJwt = (token) => {
-    try {
-      return JSON.parse(atob(token.split('.')[1]));
-    } catch (e) {
-      return null;
-    }
-  };
+  const [userData, setUserData] = React.useState("");
 
   const mount = () => {
-    if(token) {
-      var decoded = jwt_decode(token);
-      setUserData(decoded)
-    }
+    setUserData(getJwtContents())
   }
   useEffect(mount, [])
 
@@ -56,7 +43,7 @@ const ManageDialog = (props) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          <Typography className="shortenerHeadline" variant="h4">{ userData && userData.displayName + "´s Shortlinks" }</Typography>
+          <Typography className="shortenerHeadline" variant="h4">{ userData.displayName + "´s Shortlinks" }</Typography>
           <DialogContentText id="alert-dialog-description">
             {props.t('manage_headline')}
           </DialogContentText>

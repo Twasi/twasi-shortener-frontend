@@ -23,26 +23,7 @@ const DatenschutzDialog = (props) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Der twa.si URL-Shortener bietet einen kostenfreien, ohne Anmeldung nutzbaren Dienst zur Kürzung von Links an.<br/>
-            Hierzu werden einige wenige Daten gesammelt und dauerhaft gespeichert.<br/>
-            Im Folgenden wird erklärt, was gespeichert wird, wann Daten gespeichert werden und warum die Daten gespeichert werden müssen.<br/><br/>
-
-            Erstellt man einen Kurzlink mithilfe des URL-Shorteners, werden folgende Daten gespeichert:<br/><br/>
-            <ul>
-              <li>Genauer Zeitpunkt der Erstellung</li>
-              <li>Die URL, an die weitergeleitet werden soll</li>
-              <li>Der gewählte "Tag" der URL (twa.si/r/tag) falls gesetzt</li>
-              <li>Die IP-Adresse von der aus der Link erstellt wurde.</li>
-            </ul>
-            <br/>
-
-            Die URL sowie der "Tag" werden zur Funktionalität des Shorteners gespeichert, da ohne eine Speicherung und spätere Abfrage keine Weiterleitung erfolgen kann.<br/>
-            Die IP-Adresse des Nutzers sowie der Zeitpunkt der Erstellung dienen einerseits statistischen und andererseits moderatorischen Zwecken.<br/>
-            So soll bei einer Ausnutzung des URL-Shorteners um beispielsweise auf Computerviren o. Ä. zu verlinken die URL entfernt werden können.<br/>
-            Um etwaige andere Ausnutzungen desselben Nutzers zu finden wird hierzu eine IP-Adresse gespeichert.<br/>
-            Außerdem verhindert das System eine zu großen Menge an erstellten Kurzlinks in kurzer Zeit anhand der IP-Adresse.<br/><br/>
-
-            Außer der IP-Adresse werden keine Daten erhoben, welche eine Verbindung zwischen dem erstellenden Nutzer eines Kurzlinks und dem Kurzlink selbst eine Verbindung herstellen können.
+            {props.t('datenschutz_dialog')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

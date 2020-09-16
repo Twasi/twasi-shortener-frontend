@@ -2,6 +2,7 @@ import jwt_decode from "jwt-decode";
 
 const token = localStorage.getItem('JWT');
 
+/*
 const parseJwt = (token) => {
   try {
     return JSON.parse(atob(token.split('.')[1]));
@@ -9,6 +10,7 @@ const parseJwt = (token) => {
     return null;
   }
 };
+*/
 
 function isLoggedIn() {
   if(token) {
@@ -18,12 +20,20 @@ function isLoggedIn() {
   }
 }
 
+function getToken() {
+  if(token) {
+    return token;
+  } else {
+    return false;
+  }
+}
+
 function getJwtContents() {
   if(token) {
     return jwt_decode(token);
   } else {
-    return null;
+    return false;
   }
 }
 
-export default (isLoggedIn, getJwtContents)
+export default (isLoggedIn, getToken, getJwtContents)

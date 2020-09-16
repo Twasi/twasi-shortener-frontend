@@ -18,6 +18,8 @@ import PanelContent from './views/common/PanelContent';
 
 import './App.css';
 
+import getToken from './jwtContents';
+
 import twasiDarkBlue from './theme/twasi-darkblue/twasi-darkblue';
 
 const httpLink = new HttpLink({
@@ -26,12 +28,11 @@ const httpLink = new HttpLink({
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('JWT');
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: getToken() ? `Bearer ${getToken()}` : "",
     }
   }
 });

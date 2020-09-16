@@ -1,16 +1,19 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 
+import isLoggedIn from '../../jwtContents';
+
 const ConnectDialog = (props) => {
 
-  const handleRedirect = () => {
-    window.location = process.env.REACT_APP_REDIRECT_URI;
+  const handleTwitchLogin = () => {
+    if(!isLoggedIn()) {
+      return window.location = process.env.REACT_APP_REDIRECT_URI;
+    }
   }
 
   return (
@@ -27,11 +30,8 @@ const ConnectDialog = (props) => {
             {props.t('connect_headline')}
           </DialogContentText>
         </DialogTitle>
-        <DialogContent>
-
-        </DialogContent>
         <DialogActions>
-          <Button onClick={handleRedirect} fullWidth className="twitchButton">
+          <Button onClick={handleTwitchLogin} fullWidth className="twitchButton">
             {props.t('twitch_button')}
           </Button>
         </DialogActions>

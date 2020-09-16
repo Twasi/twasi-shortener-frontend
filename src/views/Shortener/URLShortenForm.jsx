@@ -40,6 +40,22 @@ const CREATE_PUBLIC_URL = gql`
   }
 `;
 
+const CREATE_AUTHENTICATED_URL = gql`
+  mutation CreateUrl($tag: String!,$url: String!){
+    createUrl(tag:$tag,url:$url){
+  		short
+      tag
+      created
+      redirection
+      createdBy{
+        type
+        id
+        ip
+      }
+    }
+  }
+`;
+
 const ALLOWED_FORMAT = gql`
   query{
     clientValidation{
@@ -128,6 +144,7 @@ const URLShortenForm = ({t}) => {
   const [selectedButton, setSelectedButton] = React.useState(false);
 
   const [createPublicUrl, { data: urlData }] = useMutation(CREATE_PUBLIC_URL);
+  const [createAuthUrl, { data: authUrlData }] = useMutation(CREATE_AUTHENTICATED_URL);
   const { data: regExData, loading: regExLoading } = useQuery(ALLOWED_FORMAT);
   const { data: publicStatsData, loading: publicStatsLoading } = useQuery(PUBLIC_STATS);
   const { data: publicStatsSubscriptionData } = useSubscription(PUBLIC_STATS_SUBSCRIPTION);
@@ -141,26 +158,46 @@ const URLShortenForm = ({t}) => {
     setOwn_short_tag(randomString.join(''))
   }
 
-  function handleCreatePublicUrl() {
+  function handleCreateUrl() {
     const regexUrl = new RegExp(regExData.clientValidation.validateRedirectUrl.regex, regExData.clientValidation.validateRedirectUrl.tags);
     //const regexTag = new RegExp(regExData.clientValidation.validateTag.regex, regExData.clientValidation.validateTag.tags);
     if(regexUrl.test(url_to_shorten)) {
-      createPublicUrl({
-        variables:{
-          tag: own_short_tag.trim(),
-          url: url_to_shorten.trim()
-        }
-      })
-      .then(() => {
-        setSuccess(true);
-        setUrl_to_shorten("");
-        setOwn_short_tag("");
-        setError("");
-        setCreate_own_short_tag(false)
-      })
-      .catch(function(error) {
-        setError(t('error')+": "+error.message)
-      })
+      // check if authenticated
+      if(isLoggedIn()) {
+        createAuthUrl({
+          variables:{
+            tag: own_short_tag.trim(),
+            url: url_to_shorten.trim()
+          }
+        })
+        .then(() => {
+          setSuccess(true);
+          setUrl_to_shorten("");
+          setOwn_short_tag("");
+          setError("");
+          setCreate_own_short_tag(false)
+        })
+        .catch(function(error) {
+          setError(t('error')+": "+error.message)
+        })
+      } else {
+        createPublicUrl({
+          variables:{
+            tag: own_short_tag.trim(),
+            url: url_to_shorten.trim()
+          }
+        })
+        .then(() => {
+          setSuccess(true);
+          setUrl_to_shorten("");
+          setOwn_short_tag("");
+          setError("");
+          setCreate_own_short_tag(false)
+        })
+        .catch(function(error) {
+          setError(t('error')+": "+error.message)
+        })
+      }
     } else {
       setError(t('error')+": "+t('url_error'))
     }
@@ -236,7 +273,7 @@ const URLShortenForm = ({t}) => {
                 <InputAdornment position="end">
                   <Button
                     disabled={!url_to_shorten}
-                    onClick={() => handleCreatePublicUrl()}
+                    onClick={() => handleCreateUrl()}
                     className="shortnerButton"
                     variant="contained"
                     color="primary"
@@ -284,7 +321,7 @@ const URLShortenForm = ({t}) => {
               InputProps={{
                 startAdornment:
                   <InputAdornment position="start">
-                    {process.env.REACT_APP_DOMAIN}
+                    {process.env.REACT_APP_TOP_LEVEL_DOMAIN + (isLoggedIn() ? process.env.REACT_APP_AUTHENTICATED_SHORT : process.env.REACT_APP_PUBLIC_SHORT) + "/"}
                   </InputAdornment>,
                 endAdornment:
                   <InputAdornment position="end">
@@ -318,7 +355,7 @@ const URLShortenForm = ({t}) => {
         <ManageDialog t={t} onClose={handleCloseManage} open={openManage}/> :
         <ConnectDialog t={t} onClose={handleCloseConnect} open={openConnect}/>
       }
-      {success && urlData ? <SuccessPage t={t} createdUrlCount={publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated} onNewUrl={handleNewUrl} urlData={urlData}/> : renderForm()}
+      {success && (urlData || authUrlData) ? <SuccessPage t={t} createdUrlCount={publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated} onNewUrl={handleNewUrl} urlData={isLoggedIn() ? authUrlData : urlData}/> : renderForm()}
     </div>
   )
 }

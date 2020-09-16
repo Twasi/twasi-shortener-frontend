@@ -25,6 +25,7 @@
   "disconnect_button": "Verbindung zu Twitch trennen",
   "connect_headline": "Melde dich mit Twitch an, um deine erstellten Shortlinks zu verwalten.",
   "twitch_button": "Mit Twitch verbinden",
+  "share_text": "Schaut euch meinen coolen neuen Link an, der mit dem @TwasiNet Link-Shortener erstellt wurde! %shortlink% Auf %top_level_domain% kannst du deinen eigenen Shortlink erstellen! 👀",
   "disclaimer_text": "Mit der Nutzung dieses Dienstes stimmst Du unserer Datenschutzbestimmung und unserem Haftungsausschluss (Disclaimer) zu.",
   "button_array": [
     "Magie!",

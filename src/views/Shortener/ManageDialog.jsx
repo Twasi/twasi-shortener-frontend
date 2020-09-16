@@ -17,6 +17,7 @@ import Link from '@material-ui/core/Link';
 import Chip from '@material-ui/core/Chip';
 
 import getJwtContents from '../../jwtContents';
+import isLoggedIn from '../../jwtContents';
 
 const ManageDialog = (props) => {
 
@@ -27,9 +28,11 @@ const ManageDialog = (props) => {
   }
   useEffect(mount, [])
 
-  const handleLogout = () => {
-    localStorage.removeItem('JWT');
-    window.location.reload();
+  const handleTwitchLogout = () => {
+    if(isLoggedIn()) {
+      localStorage.removeItem('JWT');
+      window.location.reload();
+    }
   }
 
   return (
@@ -101,7 +104,7 @@ const ManageDialog = (props) => {
           </TableContainer>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleLogout} fullWidth color="secondary">
+          <Button onClick={handleTwitchLogout} fullWidth color="secondary">
             {props.t('disconnect_button')}
           </Button>
         </DialogActions>

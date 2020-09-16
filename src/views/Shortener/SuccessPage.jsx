@@ -6,33 +6,41 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import QRCode from 'qrcode.react';
 
+import isLoggedIn from '../../jwtContents'
+
 function handleRedirect(uri, blank){
   window.open(encodeURI(uri), blank);
 }
 
 const SuccessPage = (props) => {
+
   const [copied, setCopied] = React.useState(false);
+  const shortUrl = isLoggedIn() ? process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+props.authUrlData.createUrl.short+'/'+props.authUrlData.createUrl.tag:
+    process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag;
+  const urlCount = props.createdUrlCount;
+  const shareText = props.t('share_text').replace('%shortlink%',shortUrl).replace('%top_level_domain%',process.env.REACT_APP_TOP_LEVEL_DOMAIN);
+
   return(
     <div className="anim">
       <QRCode
         className="QRCode"
         bgColor="transparent"
         fgColor="#2f80ed"
-        value={process.env.REACT_APP_TOP_LEVEL_DOMAIN+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag}
+        value={shortUrl}
       />
       <Typography className="shortenerHeadline" variant="h4">
         {props.t('your_url')}
       </Typography>
       <Paper>
         <TextField
-          value={process.env.REACT_APP_TOP_LEVEL_DOMAIN+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag}
+          value={shortUrl}
           className="shortenerTextfield"
           InputProps={{
             endAdornment:
               <InputAdornment position="end">
                 <Button
                   onClick={e => {
-                    navigator.clipboard.writeText(process.env.REACT_APP_TOP_LEVEL_DOMAIN+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag);
+                    navigator.clipboard.writeText(shortUrl);
                     setCopied(true)
                     e.stopPropagation();
                   }}
@@ -60,7 +68,7 @@ const SuccessPage = (props) => {
           {props.t('shorten_another_url')}
         </Button>
         <Button
-          onClick={() => { handleRedirect("https://twitter.com/intent/tweet?text=Schaut euch meinen coolen neuen Link an, der mit dem @TwasiNet Link-Shortener erstellt wurde! "+process.env.REACT_APP_TOP_LEVEL_DOMAIN+props.urlData.createPublicUrl.short+"/"+props.urlData.createPublicUrl.tag+" Auf "+process.env.REACT_APP_TOP_LEVEL_DOMAIN+" kannst du deinen eigenen Shortlink erstellen! 👀", "_blank") }}
+          onClick={() => { handleRedirect("https://twitter.com/intent/tweet?text="+shareText, "_blank") }}
           className="newUrlButton"
           style={{ marginLeft: '10px' }}
           variant="outlined"
@@ -72,11 +80,11 @@ const SuccessPage = (props) => {
         <Button
           disabled
           className="newUrlButton"
-          style={{ marginLeft: '10px' }}
+          style={{ marginLeft: '10px', float: 'right' }}
           variant="outlined"
           disableElevation
         >
-          {props.t('link_number')}: {props.createdUrlCount}
+          {props.t('link_number')}: {urlCount}
         </Button>
       </div>
     </div>

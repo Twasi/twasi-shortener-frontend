@@ -25,8 +25,8 @@ import ManageDialog from './ManageDialog';
 import { useMutation, useQuery, useSubscription, gql } from '@apollo/client';
 
 const CREATE_PUBLIC_URL = gql`
-  mutation CreatePublicUrl($tag: String!,$url: String!){
-    createPublicUrl(tag:$tag,url:$url){
+  mutation CreatePublicUrl($tag: String!,$redirection: String!){
+    createPublicUrl(tag:$tag,redirection:$redirection){
   		short
       tag
       created
@@ -36,13 +36,14 @@ const CREATE_PUBLIC_URL = gql`
         id
         ip
       }
+      urlNumber
     }
   }
 `;
 
 const CREATE_AUTHENTICATED_URL = gql`
-  mutation CreateUrl($tag: String!,$url: String!){
-    createUrl(tag:$tag,url:$url){
+  mutation CreateUrl($tag: String!,$short: String!,$redirection: String!){
+    createUrl(tag:$tag,short:$short,redirection:$redirection){
   		short
       tag
       created
@@ -52,6 +53,7 @@ const CREATE_AUTHENTICATED_URL = gql`
         id
         ip
       }
+      urlNumber
     }
   }
 `;
@@ -167,7 +169,8 @@ const URLShortenForm = ({t}) => {
         createAuthUrl({
           variables:{
             tag: own_short_tag.trim(),
-            url: url_to_shorten.trim()
+            short: '',
+            redirection: url_to_shorten.trim()
           }
         })
         .then(() => {
@@ -184,7 +187,7 @@ const URLShortenForm = ({t}) => {
         createPublicUrl({
           variables:{
             tag: own_short_tag.trim(),
-            url: url_to_shorten.trim()
+            redirection: url_to_shorten.trim()
           }
         })
         .then(() => {
@@ -355,7 +358,7 @@ const URLShortenForm = ({t}) => {
         <ManageDialog t={t} onClose={handleCloseManage} open={openManage}/> :
         <ConnectDialog t={t} onClose={handleCloseConnect} open={openConnect}/>
       }
-      {success && (urlData || authUrlData) ? <SuccessPage t={t} createdUrlCount={publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated} onNewUrl={handleNewUrl} urlData={isLoggedIn() ? authUrlData : urlData}/> : renderForm()}
+      {success && (urlData || authUrlData) ? <SuccessPage t={t} onNewUrl={handleNewUrl} urlData={isLoggedIn() ? authUrlData : urlData}/> : renderForm()}
     </div>
   )
 }

@@ -15,9 +15,9 @@ function handleRedirect(uri, blank){
 const SuccessPage = (props) => {
 
   const [copied, setCopied] = React.useState(false);
-  const shortUrl = isLoggedIn() ? process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+props.authUrlData.createUrl.short+'/'+props.authUrlData.createUrl.tag:
+  const shortUrl = isLoggedIn() ? process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+props.urlData.createUrl.short+'/'+props.urlData.createUrl.tag:
     process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag;
-  const urlCount = props.createdUrlCount;
+  const urlCount = isLoggedIn() ? props.urlData.createUrl.urlNumber : props.urlData.createPublicUrl.urlNumber;
   const shareText = props.t('share_text').replace('%shortlink%',shortUrl).replace('%top_level_domain%',process.env.REACT_APP_TOP_LEVEL_DOMAIN);
 
   return(

@@ -79,6 +79,14 @@ const PUBLIC_STATS = gql`
   }
 `;
 
+const GLOBAL_STATS = gql`
+  query GlobalStats($shorts: [String]!){
+    globalStats(shorts: $shorts) {
+      urlsCreated
+    }
+  }
+`;
+
 const PUBLIC_STATS_SUBSCRIPTION = gql`
   subscription {
     publicStats {
@@ -155,18 +163,23 @@ const URLShortenForm = ({t}) => {
   const [success, setSuccess] = React.useState(false);
   const [selectedLink, setSelectedLink] = React.useState("");
   const [selectedButton, setSelectedButton] = React.useState(false);
-  const [loggedIn, setLoggedIn] = React.useState(false);
 
   const [createPublicUrl, { data: urlData }] = useMutation(CREATE_PUBLIC_URL);
   const [createAuthUrl, { data: authUrlData }] = useMutation(CREATE_AUTHENTICATED_URL);
   const { data: regExData, loading: regExLoading } = useQuery(ALLOWED_FORMAT);
-  const { data: publicStatsData, loading: publicStatsLoading } = useQuery(PUBLIC_STATS);
-  const { data: publicStatsSubscriptionData } = useSubscription(PUBLIC_STATS_SUBSCRIPTION);
-  const { data: meData, loading: meLoading } = useQuery(ME);
+  //const { data: publicStatsData, loading: publicStatsLoading } = useQuery(PUBLIC_STATS);
+  const { loading: globalStatsLoading, data: globalStatsData } = useQuery(GLOBAL_STATS, {
+    variables:{
+      shorts: ["r","c"],
+    }
+  });
+  //const { data: publicStatsSubscriptionData } = useSubscription(PUBLIC_STATS_SUBSCRIPTION);
+  const { data: meData } = useQuery(ME);
   //const [checkTag, { loading: tagLoading, data: tagData }] = useLazyQuery(CHECK_TAG);
 
   if(regExLoading) return (<p>Loading...</p>);
-  if(publicStatsLoading) return (<p>Loading...</p>);
+  //if(publicStatsLoading) return (<p>Loading...</p>);
+  if(globalStatsLoading) return (<p>Loading...</p>);
 
   function randomizeShortTag() {
     var randomString = randomWords(3);
@@ -332,7 +345,7 @@ const URLShortenForm = ({t}) => {
           </Grid>
           <Grid item xs={6}>
             <Typography style={{ marginTop: "16px", marginRight: "12px", color: "#afb6c5", textAlign: "right" }} variant="caption" display="block" gutterBottom>
-              {t('created_urls')}: {publicStatsSubscriptionData ? publicStatsSubscriptionData.publicStats.urlsCreated+1 : publicStatsData && publicStatsData.publicStats.urlsCreated}
+              {t('created_urls')}: {globalStatsData && globalStatsData.globalStats.urlsCreated}
             </Typography>
           </Grid>
         </Grid>

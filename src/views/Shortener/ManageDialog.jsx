@@ -17,8 +17,6 @@ import Link from '@material-ui/core/Link';
 import Chip from '@material-ui/core/Chip';
 import Pagination from '@material-ui/lab/Pagination';
 
-import getJwtContents from '../../jwtContents';
-
 import './style.css';
 
 import { useQuery, gql } from '@apollo/client';
@@ -50,10 +48,9 @@ const MY_URLS = gql`
 const ManageDialog = (props) => {
 
   const [userData, setUserData] = React.useState("");
-  const [error, setError] = React.useState("");
   const [page, setPage] = React.useState(1);
 
-  const { loading: myUrlsLoading, data: myUrlsData } = useQuery(MY_URLS, {
+  const { data: myUrlsData } = useQuery(MY_URLS, {
     variables:{
       page: page,
       pageSize: 10

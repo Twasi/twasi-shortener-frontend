@@ -6,12 +6,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 
-import isLoggedIn from '../../jwtContents';
-
 const ConnectDialog = (props) => {
 
   const handleTwitchLogin = () => {
-    if(!isLoggedIn()) {
+    if(!props.isLoggedIn) {
       return window.location = process.env.REACT_APP_REDIRECT_URI;
     }
   }

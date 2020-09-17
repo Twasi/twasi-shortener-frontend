@@ -27,12 +27,23 @@
   background-color: #9147ff !important;
   color: #ffffff !important;
 }
+.paginationWrapper {
+  margin-top: 25px;
+  width: fit-content;
+  margin: auto;
+}
 .shortenerHeadline {
   width: fit-content;
   font-weight: 900 !important;
   background: -webkit-linear-gradient(right, #56ccf2, #2f80ed);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+.overflow {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .shortenerTextfield > div {
   padding-right: 0px;

@@ -2,14 +2,6 @@ import jwt_decode from "jwt-decode";
 
 const token = localStorage.getItem('JWT');
 
-function isLoggedIn() {
-  if(token) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 function getToken() {
   if(token) {
     return token;
@@ -26,4 +18,4 @@ function getJwtContents() {
   }
 }
 
-export default (isLoggedIn, getToken, getJwtContents)
+export default (getToken, getJwtContents)

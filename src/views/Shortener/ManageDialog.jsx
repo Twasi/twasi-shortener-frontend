@@ -15,24 +15,75 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Link from '@material-ui/core/Link';
 import Chip from '@material-ui/core/Chip';
+import Pagination from '@material-ui/lab/Pagination';
 
 import getJwtContents from '../../jwtContents';
-import isLoggedIn from '../../jwtContents';
+
+import './style.css';
+
+import { useQuery, gql } from '@apollo/client';
+
+const MY_URLS = gql`
+  query MyUrls($page: Int,$pageSize: Int){
+    myUrls(page:$page, pageSize:$pageSize){
+      page
+      pages
+      total
+      items{
+        _id
+        short
+        tag
+        created
+        redirection
+        hits
+        createdBy{
+          type
+          id
+          ip
+        }
+        urlNumber
+      }
+    }
+  }
+`;
 
 const ManageDialog = (props) => {
 
   const [userData, setUserData] = React.useState("");
+  const [error, setError] = React.useState("");
+  const [page, setPage] = React.useState(1);
+
+  const { loading: myUrlsLoading, data: myUrlsData } = useQuery(MY_URLS, {
+    variables:{
+      page: page,
+      pageSize: 10
+    }
+  });
 
   const mount = () => {
-    setUserData(getJwtContents())
+    setUserData(props.meData.me)
   }
   useEffect(mount, [])
 
   const handleTwitchLogout = () => {
-    if(isLoggedIn()) {
+    if(props.isLoggedIn) {
       localStorage.removeItem('JWT');
       window.location.reload();
     }
+  }
+
+  const handleChangePage = (event, value) => {
+    setPage(value)
+  };
+
+  function renderItems() {
+    return myUrlsData && myUrlsData.myUrls.items.map(item => (
+      <TableRow>
+        <TableCell><Link href={process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+item.short+"/"+item.tag} target="_blank">{process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+item.short+"/"+item.tag}</Link></TableCell>
+        <TableCell className="overflow"><Link href={item.redirection} target="_blank">{item.redirection}</Link></TableCell>
+        <TableCell><Chip label={item.hits} color="primary"/></TableCell>
+      </TableRow>
+    ))
   }
 
   return (
@@ -59,49 +110,17 @@ const ManageDialog = (props) => {
                   <TableCell>Shortlink</TableCell>
                   <TableCell>Links to</TableCell>
                   <TableCell>Hits</TableCell>
-                  <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow>
-                  <TableCell>
-                    <Link href="https://twa.si/r/extension" target="_blank">https://twa.si/r/extension</Link>
-                  </TableCell>
-                  <TableCell>
-                    <Link href="https://chrome.google.com/webstore/detail/twasi-url-shortener/lngjokdnklohagplfpcpjjmmkcehiabm?hl=de&authuser=1" target="_blank">
-                      https://chrome.google.com/webstore/detail/twasi-url-shortener/lngjokdnklohagplfpcpjjmmkcehiabm?hl=de&authuser=1
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Chip color="primary" label="1.337"/>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Button variant="contained" color="secondary">
-                      Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>
-                    <Link href="https://twa.si/r/extension" target="_blank">https://twa.si/r/extension</Link>
-                  </TableCell>
-                  <TableCell>
-                    <Link href="https://chrome.google.com/webstore/detail/twasi-url-shortener/lngjokdnklohagplfpcpjjmmkcehiabm?hl=de&authuser=1" target="_blank">
-                      https://chrome.google.com/webstore/detail/twasi-url-shortener/lngjokdnklohagplfpcpjjmmkcehiabm?hl=de&authuser=1
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Chip color="primary" label="1.337"/>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Button variant="contained" color="secondary">
-                      Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
+                {renderItems()}
               </TableBody>
             </Table>
           </TableContainer>
+          {myUrlsData && myUrlsData.myUrls.pages > 1 &&
+          <div className="paginationWrapper" style={{ marginTop: '25px' }}>
+            <Pagination count={myUrlsData && myUrlsData.myUrls.pages} page={page} onChange={handleChangePage} color="primary" />
+          </div>}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleTwitchLogout} fullWidth color="secondary">

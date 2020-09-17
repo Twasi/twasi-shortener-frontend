@@ -6,8 +6,6 @@ import Button from '@material-ui/core/Button';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import QRCode from 'qrcode.react';
 
-import isLoggedIn from '../../jwtContents'
-
 function handleRedirect(uri, blank){
   window.open(encodeURI(uri), blank);
 }
@@ -15,9 +13,9 @@ function handleRedirect(uri, blank){
 const SuccessPage = (props) => {
 
   const [copied, setCopied] = React.useState(false);
-  const shortUrl = isLoggedIn() ? process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+props.urlData.createUrl.short+'/'+props.urlData.createUrl.tag:
+  const shortUrl = props.isLoggedIn ? process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+props.urlData.createUrl.short+'/'+props.urlData.createUrl.tag:
     process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag;
-  const urlCount = isLoggedIn() ? props.urlData.createUrl.urlNumber : props.urlData.createPublicUrl.urlNumber;
+  const urlCount = props.isLoggedIn ? props.urlData.createUrl.urlNumber : props.urlData.createPublicUrl.urlNumber;
   const shareText = props.t('share_text').replace('%shortlink%',shortUrl).replace('%top_level_domain%',process.env.REACT_APP_TOP_LEVEL_DOMAIN);
 
   return(

@@ -11,8 +11,6 @@ import Grid from '@material-ui/core/Grid';
 import LoopIcon from '@material-ui/icons/Loop';
 import Alert from '@material-ui/lab/Alert';
 
-import isLoggedIn from '../../jwtContents'
-
 import { withNamespaces } from 'react-i18next';
 
 import randomWords from 'random-words';
@@ -89,6 +87,19 @@ const PUBLIC_STATS_SUBSCRIPTION = gql`
   }
 `;
 
+const ME = gql`
+  query {
+    me {
+      _id
+      userName
+      displayName
+      twitchId
+      avatar
+      email
+    }
+  }
+`;
+
 /*
 const CHECK_TAG = gql`
   query checkTag($tag: String!){
@@ -144,12 +155,14 @@ const URLShortenForm = ({t}) => {
   const [success, setSuccess] = React.useState(false);
   const [selectedLink, setSelectedLink] = React.useState("");
   const [selectedButton, setSelectedButton] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   const [createPublicUrl, { data: urlData }] = useMutation(CREATE_PUBLIC_URL);
   const [createAuthUrl, { data: authUrlData }] = useMutation(CREATE_AUTHENTICATED_URL);
   const { data: regExData, loading: regExLoading } = useQuery(ALLOWED_FORMAT);
   const { data: publicStatsData, loading: publicStatsLoading } = useQuery(PUBLIC_STATS);
   const { data: publicStatsSubscriptionData } = useSubscription(PUBLIC_STATS_SUBSCRIPTION);
+  const { data: meData, loading: meLoading } = useQuery(ME);
   //const [checkTag, { loading: tagLoading, data: tagData }] = useLazyQuery(CHECK_TAG);
 
   if(regExLoading) return (<p>Loading...</p>);
@@ -213,6 +226,14 @@ const URLShortenForm = ({t}) => {
     }
     var randomString = randomWords(3);
     setOwn_short_tag_placeholder(randomString.join(''))
+  }
+
+  const isLoggedIn = () => {
+    if(meData && meData.me){
+      return true;
+    } else {
+      return false;
+    }
   }
 
   const handleClose404 = () => {
@@ -355,10 +376,10 @@ const URLShortenForm = ({t}) => {
     <div>
       <NotFoundDialog t={t} onClose={handleClose404} open={open404}/>
       {isLoggedIn() ?
-        <ManageDialog t={t} onClose={handleCloseManage} open={openManage}/> :
-        <ConnectDialog t={t} onClose={handleCloseConnect} open={openConnect}/>
+        <ManageDialog t={t} onClose={handleCloseManage} isLoggedIn={isLoggedIn()} meData={isLoggedIn() && meData} open={openManage}/> :
+        <ConnectDialog t={t} onClose={handleCloseConnect} isLoggedIn={isLoggedIn()} open={openConnect}/>
       }
-      {success && (urlData || authUrlData) ? <SuccessPage t={t} onNewUrl={handleNewUrl} urlData={isLoggedIn() ? authUrlData : urlData}/> : renderForm()}
+      {success && (urlData || authUrlData) ? <SuccessPage t={t} onNewUrl={handleNewUrl} isLoggedIn={isLoggedIn()} urlData={isLoggedIn() ? authUrlData : urlData}/> : renderForm()}
     </div>
   )
 }

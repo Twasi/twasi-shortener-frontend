@@ -15,7 +15,7 @@ const SuccessPage = (props) => {
   const [copied, setCopied] = React.useState(false);
   const shortUrl = props.isLoggedIn ? process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+props.urlData.createUrl.short+'/'+props.urlData.createUrl.tag:
     process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+props.urlData.createPublicUrl.short+'/'+props.urlData.createPublicUrl.tag;
-  const urlCount = props.isLoggedIn ? props.urlData.createUrl.urlNumber : props.urlData.createPublicUrl.urlNumber;
+  //const urlCount = props.isLoggedIn ? props.urlData.createUrl.urlNumber : props.urlData.createPublicUrl.urlNumber;
   const shareText = props.t('share_text').replace('%shortlink%',shortUrl).replace('%top_level_domain%',process.env.REACT_APP_TOP_LEVEL_DOMAIN);
 
   return(
@@ -74,15 +74,6 @@ const SuccessPage = (props) => {
           disableElevation
         >
           {props.t('share_on_twitter')}
-        </Button>
-        <Button
-          disabled
-          className="newUrlButton"
-          style={{ marginLeft: '10px', float: 'right' }}
-          variant="outlined"
-          disableElevation
-        >
-          {props.t('link_number')}: {urlCount}
         </Button>
       </div>
     </div>

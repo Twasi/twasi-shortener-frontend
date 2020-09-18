@@ -71,26 +71,22 @@ const ALLOWED_FORMAT = gql`
   }
 `;
 
-const PUBLIC_STATS = gql`
-  query {
-    publicStats {
-      urlsCreated
-    }
-  }
-`;
-
 const GLOBAL_STATS = gql`
   query GlobalStats($shorts: [String]!){
     globalStats(shorts: $shorts) {
       urlsCreated
+      urlHits {
+        total
+      }
     }
   }
 `;
 
-const PUBLIC_STATS_SUBSCRIPTION = gql`
-  subscription {
-    publicStats {
+const GLOBAL_STATS_SUBSCRIPTION = gql`
+  subscription GlobalStats($shorts: [String]!){
+    globalStats(shorts: $shorts) {
       urlsCreated
+      urlHits
     }
   }
 `;
@@ -173,13 +169,19 @@ const URLShortenForm = ({t}) => {
       shorts: ["r","c"],
     }
   });
+  const { data: globalStatsSubscriptionData } = useSubscription(GLOBAL_STATS_SUBSCRIPTION, {
+    variables:{
+      shorts: ["r","c"],
+    }
+  });
   //const { data: publicStatsSubscriptionData } = useSubscription(PUBLIC_STATS_SUBSCRIPTION);
   const { data: meData } = useQuery(ME);
   //const [checkTag, { loading: tagLoading, data: tagData }] = useLazyQuery(CHECK_TAG);
 
   if(regExLoading) return (<p>Loading...</p>);
-  //if(publicStatsLoading) return (<p>Loading...</p>);
   if(globalStatsLoading) return (<p>Loading...</p>);
+
+  console.log(globalStatsSubscriptionData)
 
   function randomizeShortTag() {
     var randomString = randomWords(3);
@@ -345,7 +347,7 @@ const URLShortenForm = ({t}) => {
           </Grid>
           <Grid item xs={6}>
             <Typography style={{ marginTop: "16px", marginRight: "12px", color: "#afb6c5", textAlign: "right" }} variant="caption" display="block" gutterBottom>
-              {t('created_urls')}: {globalStatsData && globalStatsData.globalStats.urlsCreated}
+              {t('created_urls')}: {globalStatsSubscriptionData ? globalStatsSubscriptionData.globalStats.urlsCreated : globalStatsData && globalStatsData.globalStats.urlsCreated}
             </Typography>
           </Grid>
         </Grid>

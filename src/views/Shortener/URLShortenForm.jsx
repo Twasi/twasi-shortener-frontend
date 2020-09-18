@@ -25,8 +25,8 @@ import ManageDialog from './ManageDialog';
 import { useMutation, useQuery, useSubscription, gql } from '@apollo/client';
 
 const CREATE_PUBLIC_URL = gql`
-  mutation CreatePublicUrl($tag: String!,$redirection: String!){
-    createPublicUrl(tag:$tag,redirection:$redirection){
+  mutation CreatePublicUrl($tag: String!,$redirection: String!,$url: String!){
+    createPublicUrl(tag:$tag,redirection:$redirection,url:$url){
   		short
       tag
       created
@@ -236,7 +236,8 @@ const URLShortenForm = ({t}) => {
         createPublicUrl({
           variables:{
             tag: own_short_tag.trim(),
-            redirection: url_to_shorten.trim()
+            redirection: url_to_shorten.trim(),
+            url: url_to_shorten.trim()
           }
         })
         .then(() => {

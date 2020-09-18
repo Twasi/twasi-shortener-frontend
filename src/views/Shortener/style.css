@@ -74,3 +74,26 @@
   width: 100%;
   text-align: center;
 }
+.alignContents {
+  display: contents !important;
+  margin-right: 5px;
+}
+
+#hide {
+  font: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+#txt {
+  border: none;
+  color: #888;
+  min-width: 10px;
+}
+
+#hide {
+  position: absolute;
+  height: 0;
+  overflow: hidden;
+  white-space: pre;
+}

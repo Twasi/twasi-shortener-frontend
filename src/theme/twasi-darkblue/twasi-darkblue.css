@@ -53,3 +53,7 @@
 .twasi-darkblue .tooltipAccountSwitch {
   background-color: #00aeae;
 }
+.MuiSelect-select.MuiSelect-select {
+  padding-right: 5px !important;
+  border-radius: 3px;
+}

@@ -63,7 +63,7 @@ export default createMuiTheme({
         },
         '&$selected': { // Name of the rule
           color: '#ffffff',
-          background: 'linear-gradient(135deg, rgb(63, 81, 181), rgb(84, 128, 255))'
+          backgroundColor: '#2f80ed'
         }
       }
     },
@@ -246,9 +246,18 @@ export default createMuiTheme({
     },
     MuiSelect: {
       root: {
-        color: 'rgba(255, 255, 255, 0.7)',
+        borderRadius: "3px",
+        backgroundColor: "#1a2035",
+        margin: "0px 5px 0px 5px",
+        color: '#ffffff',
         fontSize: '0.875em',
         borderBottom: '0px'
+      },
+      select: {
+        padding: "5px",
+      },
+      selectMenu: {
+        padding: "5px",
       },
       icon: {
         color: 'rgba(255, 255, 255, 0.7)'

@@ -10,6 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import LoopIcon from '@material-ui/icons/Loop';
 import Alert from '@material-ui/lab/Alert';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 
 import { withNamespaces } from 'react-i18next';
 
@@ -100,7 +102,27 @@ const ME = gql`
       twitchId
       avatar
       email
+      rank
     }
+  }
+`;
+
+const MY_SHORTS = gql`
+  query {
+    myShorts
+    myDefaultShort
+  }
+`;
+
+const DEFAULT_PUBLIC_SHORT = gql`
+  query {
+    defaultPublicShort
+  }
+`;
+
+const DEFAULT_AUTHENTICATED_SHORT = gql`
+  query {
+    defaultAuthenticatedShort
   }
 `;
 
@@ -148,21 +170,10 @@ const URLShortenForm = ({t}) => {
 
   }, [t]);
 
-  const [url_to_shorten, setUrl_to_shorten] = React.useState("");
-  const [create_own_short_tag, setCreate_own_short_tag] = React.useState(false);
-  const [own_short_tag, setOwn_short_tag] = React.useState("");
-  const [own_short_tag_placeholder, setOwn_short_tag_placeholder] = React.useState("");
-  const [error, setError] = React.useState("");
-  const [open404, setOpen404] = React.useState(false);
-  const [openConnect, setOpenConnect] = React.useState(false);
-  const [openManage, setOpenManage] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
-  const [selectedLink, setSelectedLink] = React.useState("");
-  const [selectedButton, setSelectedButton] = React.useState(false);
-
   const [createPublicUrl, { data: urlData }] = useMutation(CREATE_PUBLIC_URL);
   const [createAuthUrl, { data: authUrlData }] = useMutation(CREATE_AUTHENTICATED_URL);
   const { data: regExData, loading: regExLoading } = useQuery(ALLOWED_FORMAT);
+  const { loading: myShortsDataLoading, data: myShortsData } = useQuery(MY_SHORTS);
   //const { data: publicStatsData, loading: publicStatsLoading } = useQuery(PUBLIC_STATS);
   const { loading: globalStatsLoading, data: globalStatsData } = useQuery(GLOBAL_STATS, {
     variables:{
@@ -174,14 +185,24 @@ const URLShortenForm = ({t}) => {
       shorts: ["r","c"],
     }
   });
-  //const { data: publicStatsSubscriptionData } = useSubscription(PUBLIC_STATS_SUBSCRIPTION);
   const { data: meData } = useQuery(ME);
-  //const [checkTag, { loading: tagLoading, data: tagData }] = useLazyQuery(CHECK_TAG);
+
+  const [url_to_shorten, setUrl_to_shorten] = React.useState("");
+  const [create_own_short_tag, setCreate_own_short_tag] = React.useState(false);
+  const [own_short_tag, setOwn_short_tag] = React.useState("");
+  const [own_short_tag_placeholder, setOwn_short_tag_placeholder] = React.useState("");
+  const [error, setError] = React.useState("");
+  const [short, setShort] = React.useState("");
+  const [open404, setOpen404] = React.useState(false);
+  const [openConnect, setOpenConnect] = React.useState(false);
+  const [openManage, setOpenManage] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  const [selectedLink, setSelectedLink] = React.useState("");
+  const [selectedButton, setSelectedButton] = React.useState(false);
 
   if(regExLoading) return (<p>Loading...</p>);
   if(globalStatsLoading) return (<p>Loading...</p>);
-
-  console.log(globalStatsSubscriptionData)
+  if(myShortsDataLoading) return (<p>Loading...</p>);
 
   function randomizeShortTag() {
     var randomString = randomWords(3);
@@ -197,7 +218,7 @@ const URLShortenForm = ({t}) => {
         createAuthUrl({
           variables:{
             tag: own_short_tag.trim(),
-            short: '',
+            short: short,
             redirection: url_to_shorten.trim()
           }
         })
@@ -235,6 +256,7 @@ const URLShortenForm = ({t}) => {
   }
 
   function handleSetOwnTag(event) {
+    setShort(myShortsData && myShortsData.myDefaultShort)
     setCreate_own_short_tag(event.target.checked)
     if(!create_own_short_tag){
       setOwn_short_tag("");
@@ -279,6 +301,16 @@ const URLShortenForm = ({t}) => {
     setError("");
     setCreate_own_short_tag(false)
   };
+
+  const handleChangeShort = event => {
+    setShort(event.target.value);
+  };
+
+  function renderShortSelect(){
+    return myShortsData && myShortsData.myShorts.map(short => (
+      <MenuItem value={short}>{short}</MenuItem>
+    ))
+  }
 
   function renderForm() {
 
@@ -360,7 +392,38 @@ const URLShortenForm = ({t}) => {
               InputProps={{
                 startAdornment:
                   <InputAdornment position="start">
-                    {process.env.REACT_APP_TOP_LEVEL_DOMAIN + (isLoggedIn() ? process.env.REACT_APP_AUTHENTICATED_SHORT : process.env.REACT_APP_PUBLIC_SHORT) + "/"}
+                    {process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"}
+                    {isLoggedIn() ?
+                      <div>
+                        {meData && meData.me.rank === "TEAM" ?
+                        <TextField
+                          id="txt"
+                          InputProps={{ disableUnderline: true }}
+                          className="alignContents"
+                          onChange={(event) => {
+                            setShort(event.target.value);
+                          }}
+                          value={short}
+                          placeholder={"short"}
+                        />
+                        :
+                        <Select
+                          disableUnderline
+                          value={short}
+                          onChange={handleChangeShort}
+                          inputProps={{
+                            name: 'short'
+                          }}>
+                            {renderShortSelect()}
+                        </Select>
+                        }
+                        <div className="alignContents">
+                          /
+                        </div>
+                      </div>
+                      :
+                      myShortsData && myShortsData.myDefaultShort+"/"
+                    }
                   </InputAdornment>,
                 endAdornment:
                   <InputAdornment position="end">

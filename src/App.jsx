@@ -3,7 +3,11 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+<<<<<<< HEAD
 import { ApolloProvider, ApolloLink, concat} from '@apollo/client';
+=======
+import { ApolloLink, ApolloProvider, concat } from '@apollo/client';
+>>>>>>> 80325e1c99d62cb2406314aee463c784827c236f
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { HttpLink } from 'apollo-link-http';
@@ -27,7 +31,11 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   // add the authorization to the headers
   operation.setContext({
     headers: {
+<<<<<<< HEAD
       authorization: localStorage.getItem('JWT') ? localStorage.getItem('JWT') : "",
+=======
+      authorization: localStorage.getItem('JWT') || null,
+>>>>>>> 80325e1c99d62cb2406314aee463c784827c236f
     }
   });
 

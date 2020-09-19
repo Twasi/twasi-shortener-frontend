@@ -40,7 +40,7 @@
   -webkit-text-fill-color: transparent;
 }
 .overflow {
-  max-width: 300px;
+  max-width: 500px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -51,6 +51,10 @@
 .shortnerButton {
   border-radius: 0px 4px 4px 0px !important;
   height: 56px;
+}
+.shortnerButtonEdit {
+  border-radius: 0px 4px 4px 0px !important;
+  height: 40px;
 }
 .shortenerCheckbox {
   padding: 5px 0px 5px 15px !important;

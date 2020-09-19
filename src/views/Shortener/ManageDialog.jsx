@@ -16,10 +16,17 @@ import TableRow from '@material-ui/core/TableRow';
 import Link from '@material-ui/core/Link';
 import Chip from '@material-ui/core/Chip';
 import Pagination from '@material-ui/lab/Pagination';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import Fab from '@material-ui/core/Fab';
+import Alert from '@material-ui/lab/Alert';
+import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import './style.css';
 
-import { useQuery, gql } from '@apollo/client';
+import { useQuery, useMutation, gql } from '@apollo/client';
 
 const MY_URLS = gql`
   query MyUrls($page: Int,$pageSize: Int){
@@ -45,17 +52,36 @@ const MY_URLS = gql`
   }
 `;
 
+const EDIT_URL = gql`
+  mutation EditUrl($id: String!, $newRedirection: String!){
+    editUrl(id:$id, newRedirection:$newRedirection){
+      redirection
+    }
+  }
+`;
+
+const DELETE_URL = gql`
+  mutation DeleteUrl($id: String!){
+    deleteUrl(id:$id)
+  }
+`;
+
 const ManageDialog = (props) => {
 
   const [userData, setUserData] = React.useState("");
+  const [urlToEdit, setUrlToEdit] = React.useState("");
+  const [editMode, setEditMode] = React.useState("");
+  const [error, setError] = React.useState("");
   const [page, setPage] = React.useState(1);
 
-  const { data: myUrlsData } = useQuery(MY_URLS, {
+  const { data: myUrlsData, refetch: myUrlsRefetch } = useQuery(MY_URLS, {
     variables:{
       page: page,
       pageSize: 10
     }
   });
+  const [editUrl, { data: editUrlData }] = useMutation(EDIT_URL);
+  const [deleteUrl, { data: deleteUrlData }] = useMutation(DELETE_URL);
 
   const mount = () => {
     setUserData(props.meData.me)
@@ -73,12 +99,105 @@ const ManageDialog = (props) => {
     setPage(value)
   };
 
+  const handleToggleEditMode = (id, redirection) => {
+    setEditMode(id)
+    setUrlToEdit(redirection)
+  }
+
+  const handleSaveUrl = (id, redirection) => {
+    editUrl({
+      variables:{
+        id: id,
+        newRedirection: redirection.trim()
+      }
+    }).then(() => {
+      myUrlsRefetch()
+      setEditMode("")
+      setUrlToEdit(editUrlData && editUrlData.editUrl.redirection)
+    }).catch((err) => {
+      setError(err)
+    })
+  }
+
+  const handleDeleteUrl = (id) => {
+    deleteUrl({
+      variables:{
+        id: id,
+      }
+    }).then(() => {
+      myUrlsRefetch()
+    }).catch((err) => {
+      setError(err)
+    })
+  }
+
+  function isInEditMode(id){
+    if(editMode === id) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function renderItems() {
     return myUrlsData && myUrlsData.myUrls.items.map(item => (
       <TableRow>
         <TableCell><Link href={process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+item.short+"/"+item.tag} target="_blank">{process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+item.short+"/"+item.tag}</Link></TableCell>
-        <TableCell className="overflow"><Link href={item.redirection} target="_blank">{item.redirection}</Link></TableCell>
+        <TableCell className="overflow">
+          <TextField
+            size="small"
+            disabled={!isInEditMode(item._id)}
+            onChange={(event) => {
+              setUrlToEdit(event.target.value);
+            }}
+            value={isInEditMode(item._id) ? urlToEdit : item.redirection}
+            className="shortenerTextfield"
+            InputProps={{
+              endAdornment:
+                <InputAdornment position="end">
+                  {isInEditMode(item._id) ?
+                    <Button
+                      size="small"
+                      onClick={() => handleSaveUrl(item._id, urlToEdit)}
+                      disabled={!urlToEdit}
+                      className="shortnerButtonEdit"
+                      variant="contained"
+                      color="primary"
+                      disableElevation
+                    >
+                      <SaveIcon/>
+                    </Button>
+                    :
+                    <Button
+                      size="small"
+                      onClick={() => handleToggleEditMode(item._id, item.redirection)}
+                      className="shortnerButtonEdit"
+                      variant="contained"
+                      color="primary"
+                      disableElevation
+                    >
+                      <EditIcon/>
+                    </Button>
+                  }
+                </InputAdornment>
+            }}
+            variant="outlined"
+            fullWidth
+          />
+          {/*<Link href={item.redirection} target="_blank">{item.redirection}</Link>*/}
+        </TableCell>
         <TableCell><Chip label={item.hits} color="primary"/></TableCell>
+        <TableCell>
+          <Button
+            size="small"
+            onClick={() => handleDeleteUrl(item._id)}
+            variant="contained"
+            color="secondary"
+            disableElevation
+          >
+            <DeleteIcon/>
+          </Button>
+        </TableCell>
       </TableRow>
     ))
   }
@@ -90,6 +209,7 @@ const ManageDialog = (props) => {
         scroll={"body"}
         open={props.open}
         onClose={props.onClose}
+        onEnter={() => myUrlsRefetch()}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -118,6 +238,11 @@ const ManageDialog = (props) => {
           <div className="paginationWrapper" style={{ marginTop: '25px' }}>
             <Pagination count={myUrlsData && myUrlsData.myUrls.pages} page={page} onChange={handleChangePage} color="primary" />
           </div>}
+          {error &&
+            <Alert variant="outlined" severity="error">
+              {error}
+            </Alert>
+          }
         </DialogContent>
         <DialogActions>
           <Button onClick={handleTwitchLogout} fullWidth color="secondary">

@@ -26,7 +26,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import './style.css';
 
-import { useQuery, useMutation, gql } from '@apollo/client';
+import { useQuery, useMutation, useSubscription, gql } from '@apollo/client';
 
 const MY_URLS = gql`
   query MyUrls($page: Int,$pageSize: Int){
@@ -52,6 +52,15 @@ const MY_URLS = gql`
   }
 `;
 
+const MY_URL_HITS = gql`
+  subscription MyUrlHits($jwt: String!){
+    myUrlHits(jwt:$jwt){
+      id
+      hits
+    }
+  }
+`;
+
 const EDIT_URL = gql`
   mutation EditUrl($id: String!, $newRedirection: String!){
     editUrl(id:$id, newRedirection:$newRedirection){
@@ -68,11 +77,15 @@ const DELETE_URL = gql`
 
 const ManageDialog = (props) => {
 
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+
   const [userData, setUserData] = React.useState("");
   const [urlToEdit, setUrlToEdit] = React.useState("");
   const [editMode, setEditMode] = React.useState("");
   const [error, setError] = React.useState("");
   const [page, setPage] = React.useState(1);
+  const [updatedUrlHits, setUpdatedUrlHits] = React.useState({});
 
   const { data: myUrlsData, refetch: myUrlsRefetch } = useQuery(MY_URLS, {
     variables:{
@@ -80,8 +93,17 @@ const ManageDialog = (props) => {
       pageSize: 10
     }
   });
+
   const [editUrl, { data: editUrlData }] = useMutation(EDIT_URL);
   const [deleteUrl, { data: deleteUrlData }] = useMutation(DELETE_URL);
+  const { data: myUrlHitsData } = useSubscription(MY_URL_HITS, {
+    variables:{
+      jwt: localStorage.getItem('JWT'),
+    }, onSubscriptionData: ({subscriptionData}) => {
+      const {id, hits} = subscriptionData.data.myUrlHits;
+      setUpdatedUrlHits({...updatedUrlHits, [id]: {hits}});
+    }
+  });
 
   const mount = () => {
     setUserData(props.meData.me)
@@ -114,8 +136,8 @@ const ManageDialog = (props) => {
       myUrlsRefetch()
       setEditMode("")
       setUrlToEdit(editUrlData && editUrlData.editUrl.redirection)
-    }).catch((err) => {
-      setError(err)
+    }).catch(function(error) {
+      setError(props.t('error')+": "+error.message)
     })
   }
 
@@ -126,8 +148,8 @@ const ManageDialog = (props) => {
       }
     }).then(() => {
       myUrlsRefetch()
-    }).catch((err) => {
-      setError(err)
+    }).catch(function(error) {
+      setError(props.t('error')+": "+error.message)
     })
   }
 
@@ -138,6 +160,14 @@ const ManageDialog = (props) => {
       return false;
     }
   }
+
+/*
+  function getSubscriptionHits(id) {
+    if(myUrlHitsData){
+      return myUrlsHitsData.myUrlHits.filter(x => x.id === id).map(x => x.hits)[0];
+    }
+  }
+  */
 
   function renderItems() {
     return myUrlsData && myUrlsData.myUrls.items.map(item => (
@@ -186,7 +216,7 @@ const ManageDialog = (props) => {
           />
           {/*<Link href={item.redirection} target="_blank">{item.redirection}</Link>*/}
         </TableCell>
-        <TableCell><Chip label={item.hits} color="primary"/></TableCell>
+        <TableCell><Chip label={updatedUrlHits[item._id] ? updatedUrlHits[item._id].hits : item.hits} color="primary"/></TableCell>
         <TableCell>
           <Button
             size="small"
@@ -225,8 +255,9 @@ const ManageDialog = (props) => {
               <TableHead>
                 <TableRow>
                   <TableCell>Shortlink</TableCell>
-                  <TableCell>Links to</TableCell>
+                  <TableCell>Redirection</TableCell>
                   <TableCell>Hits</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -238,12 +269,12 @@ const ManageDialog = (props) => {
           <div className="paginationWrapper" style={{ marginTop: '25px' }}>
             <Pagination count={myUrlsData && myUrlsData.myUrls.pages} page={page} onChange={handleChangePage} color="primary" />
           </div>}
-          {error &&
-            <Alert variant="outlined" severity="error">
-              {error}
-            </Alert>
-          }
         </DialogContent>
+        {error &&
+          <Alert variant="outlined" severity="error">
+            {error}
+          </Alert>
+        }
         <DialogActions>
           <Button onClick={handleTwitchLogout} fullWidth color="secondary">
             {props.t('disconnect_button')}

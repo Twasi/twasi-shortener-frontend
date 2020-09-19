@@ -36,7 +36,10 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 const wsLink = new WebSocketLink({
   uri: process.env.REACT_APP_GQL_WS,
   options: {
-    reconnect: true
+    reconnect: true,
+    connectionParams: () => ({
+      authToken: localStorage.getItem('JWT') ? localStorage.getItem('JWT') : "",
+    }),
   }
 });
 

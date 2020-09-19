@@ -1,7 +1,8 @@
 {
   "shorten_url": "Shorten URL",
   "choose_own_tag": "Choose own URL tag",
-  "created_urls": "Created shortlinks",
+  "created_urls": "Shortlinks",
+  "hits": "Hits",
   "your_url": "Your URL",
   "shorten_another_url": "Shorten another URL",
   "share_on_twitter": "Share on Twitter",

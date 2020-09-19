@@ -313,6 +313,26 @@ const URLShortenForm = ({t}) => {
     ))
   }
 
+  function getShortlinksCreated(){
+    if(globalStatsSubscriptionData){
+      return globalStatsSubscriptionData.globalStats.urlsCreated
+    } else {
+      if(globalStatsData) {
+        return globalStatsData.globalStats.urlsCreated
+      }
+    }
+  }
+
+  function getHitsTotal(){
+    if(globalStatsSubscriptionData){
+      return globalStatsSubscriptionData.globalStats.urlHits
+    } else {
+      if(globalStatsData) {
+        return globalStatsData.globalStats.urlHits.total
+      }
+    }
+  }
+
   function renderForm() {
 
     return (
@@ -380,7 +400,7 @@ const URLShortenForm = ({t}) => {
           </Grid>
           <Grid item xs={6}>
             <Typography style={{ marginTop: "16px", marginRight: "12px", color: "#afb6c5", textAlign: "right" }} variant="caption" display="block" gutterBottom>
-              {t('created_urls')}: {globalStatsSubscriptionData ? globalStatsSubscriptionData.globalStats.urlsCreated : globalStatsData && globalStatsData.globalStats.urlsCreated}
+              {t('created_urls') + ": " + getShortlinksCreated() +" " + t('hits') + ": " + getHitsTotal()}
             </Typography>
           </Grid>
         </Grid>

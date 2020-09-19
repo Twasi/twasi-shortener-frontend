@@ -19,6 +19,8 @@ import Pagination from '@material-ui/lab/Pagination';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import Alert from '@material-ui/lab/Alert';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
@@ -90,7 +92,7 @@ const ManageDialog = (props) => {
   const { data: myUrlsData, refetch: myUrlsRefetch } = useQuery(MY_URLS, {
     variables:{
       page: page,
-      pageSize: 10
+      pageSize: 5
     }
   });
 
@@ -224,6 +226,7 @@ const ManageDialog = (props) => {
             variant="contained"
             color="secondary"
             disableElevation
+            className="shortenerButtonDelete"
           >
             <DeleteIcon/>
           </Button>
@@ -235,7 +238,7 @@ const ManageDialog = (props) => {
   return (
     <div>
       <Dialog
-        maxWidth="md"
+        maxWidth="lg"
         scroll={"body"}
         open={props.open}
         onClose={props.onClose}
@@ -250,33 +253,37 @@ const ManageDialog = (props) => {
           </DialogContentText>
         </DialogTitle>
         <DialogContent>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Shortlink</TableCell>
-                  <TableCell>Redirection</TableCell>
-                  <TableCell>Hits</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {renderItems()}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {myUrlsData && myUrlsData.myUrls.pages > 1 &&
-          <div className="paginationWrapper" style={{ marginTop: '25px' }}>
-            <Pagination count={myUrlsData && myUrlsData.myUrls.pages} page={page} onChange={handleChangePage} color="primary" />
-          </div>}
+          <Card>
+            <CardContent>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow style={{ borderBottom: "3px solid #2f80ed" }}>
+                      <TableCell>{props.t('table_shortlink')}</TableCell>
+                      <TableCell>{props.t('table_redirection')}</TableCell>
+                      <TableCell>{props.t('table_hits')}</TableCell>
+                      <TableCell>{props.t('table_actions')}</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {renderItems()}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              {error &&
+                <Alert variant="outlined" severity="error">
+                  {error}
+                </Alert>
+              }
+              {myUrlsData && myUrlsData.myUrls.pages > 1 &&
+              <div className="paginationWrapper" style={{ marginTop: '25px' }}>
+                <Pagination count={myUrlsData && myUrlsData.myUrls.pages} page={page} onChange={handleChangePage} color="primary" />
+              </div>}
+            </CardContent>
+          </Card>
         </DialogContent>
-        {error &&
-          <Alert variant="outlined" severity="error">
-            {error}
-          </Alert>
-        }
         <DialogActions>
-          <Button onClick={handleTwitchLogout} fullWidth color="secondary">
+          <Button style={{ margin: 'auto' }} onClick={handleTwitchLogout} color="secondary">
             {props.t('disconnect_button')}
           </Button>
         </DialogActions>

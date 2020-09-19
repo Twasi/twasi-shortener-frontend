@@ -56,9 +56,20 @@
   border-radius: 0px 4px 4px 0px !important;
   height: 40px;
 }
+.shortenerButtonDelete {
+  border-radius: 4px !important;
+  height: 40px;
+}
 .shortenerCheckbox {
   padding: 5px 0px 5px 15px !important;
 }
+
+.customShortText {
+  display: inline-block;
+  visibility: hidden;
+  white-space: pre;
+}
+
 .newUrl {
   margin-top: 10px;
   width: 100%;

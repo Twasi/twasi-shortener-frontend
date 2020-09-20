@@ -177,12 +177,12 @@ const URLShortenForm = ({t}) => {
   //const { data: publicStatsData, loading: publicStatsLoading } = useQuery(PUBLIC_STATS);
   const { loading: globalStatsLoading, data: globalStatsData } = useQuery(GLOBAL_STATS, {
     variables:{
-      shorts: ["r","c"],
+      shorts: ["r","c","x"],
     }
   });
   const { data: globalStatsSubscriptionData } = useSubscription(GLOBAL_STATS_SUBSCRIPTION, {
     variables:{
-      shorts: ["r","c"],
+      shorts: ["r","c","x"],
     }
   });
   const { data: meData } = useQuery(ME);

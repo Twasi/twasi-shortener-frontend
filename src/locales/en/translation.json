@@ -23,7 +23,7 @@
   "connect": "Connect",
   "manage": "Manage",
   "confirmation_headline": "Caution",
-  "confirmation_text": "The link you clicked may lead to a potentially unsafe page.",
+  "confirmation_text": "The link you clicked may lead to a potentially unsafe or NSFW page.",
   "confirmation_question": "Would you like to be redirected to the following URL?",
   "confirmation_accept_button": "I am aware of the danger!",
   "confirmation_decline_button": "I don't trust this link...",

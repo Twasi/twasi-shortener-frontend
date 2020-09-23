@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -32,7 +32,7 @@ const ConfirmRedirection = ({t}) => {
             <Card style={{ marginTop: "20px" }}>
               <CardContent style={{ paddingBottom: "16px" }}>
                 {t('confirmation_question')}
-                <Typography variant="h5">
+                <Typography variant="h6" style={{ color: "#ffffff", marginTop: "5px" }}>
                   {urlParams.get('confirmRedirection')}
                 </Typography>
               </CardContent>

@@ -114,26 +114,6 @@ const MY_SHORTS = gql`
   }
 `;
 
-const DEFAULT_PUBLIC_SHORT = gql`
-  query {
-    defaultPublicShort
-  }
-`;
-
-const DEFAULT_AUTHENTICATED_SHORT = gql`
-  query {
-    defaultAuthenticatedShort
-  }
-`;
-
-/*
-const CHECK_TAG = gql`
-  query checkTag($tag: String!){
-    existsPublic(tag: $tag)
-  }
-`;
-*/
-
 function removeParams(sParam)
 {
     var url = window.location.href.split('?')[0]+'?';
@@ -174,7 +154,6 @@ const URLShortenForm = ({t}) => {
   const [createAuthUrl, { data: authUrlData }] = useMutation(CREATE_AUTHENTICATED_URL);
   const { data: regExData, loading: regExLoading } = useQuery(ALLOWED_FORMAT);
   const { loading: myShortsDataLoading, data: myShortsData } = useQuery(MY_SHORTS);
-  //const { data: publicStatsData, loading: publicStatsLoading } = useQuery(PUBLIC_STATS);
   const { loading: globalStatsLoading, data: globalStatsData } = useQuery(GLOBAL_STATS, {
     variables:{
       shorts: ["r","c","x"],

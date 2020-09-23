@@ -18,13 +18,14 @@ import Chip from '@material-ui/core/Chip';
 import Pagination from '@material-ui/lab/Pagination';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
-import Fab from '@material-ui/core/Fab';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Alert from '@material-ui/lab/Alert';
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CopyIcon from '@material-ui/icons/FileCopy';
+import CheckIcon from '@material-ui/icons/Check';
 
 import './style.css';
 
@@ -79,14 +80,12 @@ const DELETE_URL = gql`
 
 const ManageDialog = (props) => {
 
-  const [, updateState] = React.useState();
-  const forceUpdate = React.useCallback(() => updateState({}), []);
-
   const [userData, setUserData] = React.useState("");
   const [urlToEdit, setUrlToEdit] = React.useState("");
   const [editMode, setEditMode] = React.useState("");
   const [error, setError] = React.useState("");
   const [page, setPage] = React.useState(1);
+  const [copiedURL, setCopiedURL] = React.useState("");
   const [updatedUrlHits, setUpdatedUrlHits] = React.useState({});
 
   const { data: myUrlsData, refetch: myUrlsRefetch } = useQuery(MY_URLS, {
@@ -97,12 +96,12 @@ const ManageDialog = (props) => {
   });
 
   const [editUrl, { data: editUrlData }] = useMutation(EDIT_URL);
-  const [deleteUrl, { data: deleteUrlData }] = useMutation(DELETE_URL);
-  const { data: myUrlHitsData } = useSubscription(MY_URL_HITS, {
+  const [deleteUrl] = useMutation(DELETE_URL);
+  useSubscription(MY_URL_HITS, {
     variables:{
       jwt: localStorage.getItem('JWT'),
-    }, onSubscriptionData: ({subscriptionData}) => {
-      const {id, hits} = subscriptionData.data.myUrlHits;
+    }, onSubscriptionData: ({myUrlHitsSubscriptionData}) => {
+      const {id, hits} = myUrlHitsSubscriptionData.data.myUrlHits;
       setUpdatedUrlHits({...updatedUrlHits, [id]: {hits}});
     }
   });
@@ -221,12 +220,32 @@ const ManageDialog = (props) => {
         <TableCell><Chip label={updatedUrlHits[item._id] ? updatedUrlHits[item._id].hits : item.hits} color="primary"/></TableCell>
         <TableCell>
           <Button
+            disabled={copiedURL === item._id}
+            style={{ marginRight: "5px" }}
+            size="small"
+            onClick={e => {
+              navigator.clipboard.writeText(process.env.REACT_APP_TOP_LEVEL_DOMAIN+"/"+item.short+"/"+item.tag);
+              setCopiedURL(item._id)
+              e.stopPropagation();
+            }}
+            variant="contained"
+            color="primary"
+            disableElevation
+            className="shortenerButtonAction"
+          >
+            {copiedURL === item._id ?
+              <CheckIcon/>
+              :
+              <CopyIcon/>
+            }
+          </Button>
+          <Button
             size="small"
             onClick={() => handleDeleteUrl(item._id)}
             variant="contained"
             color="secondary"
             disableElevation
-            className="shortenerButtonDelete"
+            className="shortenerButtonAction"
           >
             <DeleteIcon/>
           </Button>

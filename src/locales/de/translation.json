@@ -23,7 +23,7 @@
   "connect": "Anmelden",
   "manage": "Verwalten",
   "confirmation_headline": "Achtung",
-  "confirmation_text": "Der Link, den du angeklickt hast leitet möglicherweise auf eine potenziell unsichere oder unangemessen Seite weiter.",
+  "confirmation_text": "Der Link, den du angeklickt hast leitet möglicherweise auf eine potenziell unsichere oder unangemessene Seite weiter.",
   "confirmation_question": "Möchtest du auf die folgende URL weitergeleitet werden?",
   "confirmation_accept_button": "Ich habe keine Angst!",
   "confirmation_decline_button": "Ne man, lass mal...",

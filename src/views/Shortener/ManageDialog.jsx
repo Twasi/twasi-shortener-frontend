@@ -100,8 +100,8 @@ const ManageDialog = (props) => {
   useSubscription(MY_URL_HITS, {
     variables:{
       jwt: localStorage.getItem('JWT'),
-    }, onSubscriptionData: ({myUrlHitsSubscriptionData}) => {
-      const {id, hits} = myUrlHitsSubscriptionData.data.myUrlHits;
+    }, onSubscriptionData: ({subscriptionData}) => {
+      const {id, hits} = subscriptionData.data.myUrlHits;
       setUpdatedUrlHits({...updatedUrlHits, [id]: {hits}});
     }
   });
